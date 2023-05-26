@@ -1,0 +1,46 @@
+CREATE TABLE "TicketPayment" (
+	"Id"	INTEGER,
+	"TicketStatusId"	INTEGER NOT NULL,
+	"EventId"	INTEGER NOT NULL,
+	"UserId"	INTEGER NOT NULL,
+	"CreatedDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY("EventId") REFERENCES "Event"("Id"),
+	FOREIGN KEY("UserId") REFERENCES "User"("Id"),
+	FOREIGN KEY("TicketStatusId") REFERENCES "TicketStatus"("Id"),
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+
+CREATE TABLE "TicketStatus" (
+	"Id"	INTEGER,
+	"Name"	INTEGER,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE "User" (
+	"Id"	INTEGER,
+	"Name"	TEXT NOT NULL,
+	"Username"	TEXT NOT NULL,
+	"Address"	TEXT,
+	"Age"	INTEGER,
+	"Gender"	INTEGER NOT NULL,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+
+CREATE TABLE "Event" (
+	"Id"	INTEGER,
+	"Title"	TEXT NOT NULL,
+	"Description"	TEXT,
+	"StartDate"	INTEGER,
+	"EndType"	INTEGER,
+	"Price"	REAL DEFAULT 0.0,
+	"Address"	TEXT NOT NULL,
+	"CreatedDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE "EventCategoryAssociation" (
+	"Id"	INTEGER,
+	"CategoryId"	INTEGER,
+	"EventId"	INTEGER COLLATE UTF16CI,
+	FOREIGN KEY("EventId") REFERENCES "Event"("Id"),
+	FOREIGN KEY("CategoryId") REFERENCES "Category"("Id"),
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
