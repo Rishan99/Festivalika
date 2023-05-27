@@ -1,6 +1,5 @@
 import sqlite3
 import os.path
-con = None
 class DatabaseHelper:
     _instance = None
     databasePath = "database/event.db"
@@ -14,7 +13,6 @@ class DatabaseHelper:
 
         if(not self.checkIfDatabaseExists()):
             self.con=sqlite3.connect(self.databasePath)
-            print('ddddd')
             self.__initializeTable()
         else:
             self.con=sqlite3.connect(self.databasePath)   

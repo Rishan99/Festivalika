@@ -12,7 +12,7 @@ class AuthService:
        cur.execute('''SELECT COUNT(Id) as count from User WHERE username = ?  LIMIT 1''', [username])
        value =cur.fetchone()
        cur.close()
-       return int(value[0]) >0
+       return int(value) >0
         
    
     def loginUser(self,username:str, password:str):
@@ -26,7 +26,7 @@ class AuthService:
         cur.close()
         if(value == None):
             raise Exception ("Username or password is incorrect")
-        return value
+        return User.fromMap(value)
             
     def registerUser(self,user:User):
         
@@ -39,11 +39,6 @@ class AuthService:
         self.databaseHelper.con.commit()
         cur.close()   
                    
-    def getUserByUsername(self,username:str):
-       cur= self.databaseHelper.con.cursor()
-       cur.execute('''SELECT * from User WHERE username = ? LIMIT 1''', [username])
-       value =cur.fetchone()
-       cur.close()
-       return value[0]   
+
    
     
