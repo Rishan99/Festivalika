@@ -3,19 +3,19 @@ import os.path
 class DatabaseHelper:
     _instance = None
     databasePath = "database/event.db"
-   
+
     def __new__(self, *args, **kwargs):
         if not self._instance:
             self._instance = super().__new__(self, *args, **kwargs)
         return self._instance
 
     def __init__(self):
-
-        if(not self.checkIfDatabaseExists()):
-            self.con=sqlite3.connect(self.databasePath)
+        databaseExists =self.checkIfDatabaseExists()
+        self.con=sqlite3.connect(self.databasePath)
+        # Default the cursor is Tuple ie returns tuple on fetchAll() or fetchOne(), changing to dict so that we can get name of column also
+        self.con.row_factory = sqlite3.Row
+        if(not databaseExists):
             self.__initializeTable()
-        else:
-            self.con=sqlite3.connect(self.databasePath)   
     
     def __initializeTable(self):
         cur = self.con.cursor()

@@ -1,19 +1,21 @@
 
-from model.user import User
+
+from entity.gender_entity import GenderEntity
+from entity.user_entity import UserEntity
 from services.database_helper import DatabaseHelper
-from model.gender import Gender
+
 
 
 class GeneralService:
     def __init__(self):
         self.databaseHelper=DatabaseHelper()
     
-    def getGenderList(self,username:str)->bool:
+    def getGenderList(self,)->bool:
         cur= self.databaseHelper.con.cursor()
         cur.execute('''SELECT * from Gender''')
         value =cur.fetchall()
         cur.close()
-        return map(lambda x: Gender.fromMap(x),value)
+        return map(lambda x: GenderEntity.fromMap(x),value)
    
     def getUserById(self,id:str):
         cur= self.databaseHelper.con.cursor()
@@ -22,7 +24,7 @@ class GeneralService:
         cur.close()
         if(value == None):
             raise Exception (f"User doesnot exists")       
-        return User.fromMap(value)  
+        return UserEntity.fromMap(value)  
    
     def getUserByUsername(self,username:str):
        cur= self.databaseHelper.con.cursor()
@@ -31,4 +33,4 @@ class GeneralService:
        cur.close()
        if(value == None):
             raise Exception (f"User with Username {username} not found")       
-       return User.fromMap(value)      
+       return UserEntity.fromMap(value)      

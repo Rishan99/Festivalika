@@ -1,4 +1,4 @@
-class User:
+class UserEntity:
     def __init__(self, name,username,address,age,gender,password=None,id=None,):
         self.name = name
         self.username = username

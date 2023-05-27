@@ -1,15 +1,19 @@
 
-from model.user import User
+
 from services.database_helper import DatabaseHelper
-from model.gender import Gender
+
+from services.event_service import EventService
 
 
 class TicketPaymentService:
     def __init__(self):
         self.databaseHelper=DatabaseHelper()
+        self.eventService=EventService()
     
     def buyEventTicket(self,userId:int, eventId:int)->bool:
         try:
+            if(self.eventService.allowToByTicket(eventId)):
+                raise Exception("Cannot Buy ticket for this event")
             if(self.__checkIfTicketPaymentExists(userId,eventId)):
                 raise Exception("Ticket Already Bought for this event")
             cur= self.databaseHelper.con.cursor()
