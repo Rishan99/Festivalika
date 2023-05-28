@@ -1,12 +1,17 @@
 from tkinter import *
+from tkinter import messagebox as mb
 from PIL import ImageTk,Image
 
+from services.auth_service import AuthService
+    
+
 fest=Tk()
+authService=AuthService()
 
 fest.geometry("800x500")
 # title and icon
 fest.title("LOGIN")
-fest.iconbitmap("D:\\gui\\pic\\event.ico")
+fest.iconbitmap("assets/event.ico")
 fest.config(bg="#ffffff")
 
 # frame
@@ -14,6 +19,7 @@ frame=LabelFrame(fest,bg="#ffffff",padx=30,border=0)
 frame.pack(side="right",expand=True,fill=BOTH,pady=100)
 frame1=LabelFrame(fest,border=0)
 frame1.pack(side="right",expand=True,fill=BOTH)
+
 
 # configuring frame1 using grid
 frame.columnconfigure(0,weight=1)
@@ -33,6 +39,14 @@ a.grid(row=0,column=0,sticky='ws')
 b=Label(frame,text="Festivila",font=('Helvetica',30,"bold"),fg="#6a3bff",bg="#ffffff")
 b.grid(row=1,column=0,sticky='wn')
 
+def loginUser():
+    try:
+        authService.loginUser(email.get(),pwd.get())
+    except:
+        mb.showerror(title="Authentication Failed",message="dklsjsdkl")
+            
+    
+
 # login and password label and entry
 email=Label(frame,text="Email",font=('Arial',10,'bold'),bg="#ffffff")
 email.grid(row=2,column=0,sticky='w')
@@ -42,7 +56,7 @@ pwd=Label(frame,text="Password",font=('Arial',10,'bold'),bg="#ffffff")
 pwd.grid(row=4,column=0,sticky='w')
 p=Entry(frame,font=('Arial',20),bg="#eeeeee",border=0)
 p.grid(row=5,column=0,sticky='n',columnspan=2)
-logb=Button(frame,text="Login",fg="white",bg="#6a3bff")
+logb=Button(frame,text="Login",fg="white",bg="#6a3bff",command=loginUser)
 logb.grid(row=6,column=0,columnspan=2,sticky="nwe",ipady=8)
 x=Label(frame,text="Don't have an account?",font=('Arial',8,'bold'),bg="#ffffff")
 x.grid(row=7,column=0,sticky="ne")
@@ -50,7 +64,7 @@ y=Label(frame,text="Register",bg="#ffffff",font=('Arial',8,'bold'),fg="#6a3bff")
 y.grid(row=7,column=1,sticky="nw")
 
 # for images
-img=Image.open("pic/con1.jpg")
+img=Image.open("assets/con1.jpg")
 resize=img.resize((1000,800),Image.ANTIALIAS)
 nimg=ImageTk.PhotoImage(resize)
 label=Label(frame1,image=nimg)
