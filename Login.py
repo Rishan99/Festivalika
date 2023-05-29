@@ -73,7 +73,7 @@ fest.mainloop()
 from tkinter import *
 from PIL import ImageTk,Image
 from Imageicon import *
-# from register import *
+
 
 fest=Tk()
 fest.geometry("800x500")
