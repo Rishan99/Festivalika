@@ -30,7 +30,7 @@ def show_reg():
 
     # for frame
     frame_reg=LabelFrame(reg,bg="#d8d8d8",border=0)
-    frame_reg.pack(side="bottom")
+    frame_reg.pack(row=0,column=0,ipady=90)
 
     # Configure frame
     frame_reg.columnconfigure(0,weight=1)
