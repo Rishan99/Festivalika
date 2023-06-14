@@ -76,7 +76,7 @@ class EventService:
         values =cur.fetchall()
         return map(lambda x:EventEntity.fromMap(x),values) 
         
-    def allowToByTicket(self,eventId:int)->bool:
+    def allowToBuyTicket(self,eventId:int)->bool:
         return True
               
                       
