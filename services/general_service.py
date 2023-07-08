@@ -15,7 +15,7 @@ class GeneralService:
         cur.execute('''SELECT * from Gender''')
         value =cur.fetchall()
         cur.close()
-        return map(lambda x: GenderEntity.fromMap(x),value)
+        return list(map(lambda x: GenderEntity.fromMap(x),value))
    
     def getUserById(self,id:str):
         cur= self.databaseHelper.con.cursor()

@@ -9,7 +9,8 @@ class UserEntity:
         self.password = password
 
     @classmethod
-    def fromMap(self, map):
+    def fromMap(self, data):
+        map=dict(data)
         name = map.get('name')
         id = map.get('id')
         username = map.get('username')

@@ -2,15 +2,14 @@ from entity.event.event_entity import EventEntity
 
 
 class EventDetailEntity(EventEntity):
-    def __init__(self, id, name):
-        self.canBuyTicket = False
-        self.ticketStatusId = 1
-        self.categoryId = 1
-        self.categoryName = 1
-        self.ticketStatusName=""
+    def __init__(self, canBuyTicket, ticketStatusId,categoryId,categoryName,ticketStatusName):
+        self.canBuyTicket = canBuyTicket
+        self.ticketStatusId =ticketStatusId
+        self.categoryId = categoryId
+        self.categoryName =categoryName
+        self.ticketStatusName=ticketStatusName
 
     @classmethod
-    def fromMap(self, map):
-        name = map.get('name')
-        id = map.get('id')
-        return self(id, name)
+    def fromMap(self, data):
+        map=dict(data)
+        return self(map.get("canBuyTicket"), map.get("ticketStatusId"), map.get("categoryId"), map.get("categoryName"), map.get("ticketStatusName"))

@@ -7,7 +7,8 @@ class EventListEntity(EventEntity):
         self.name = name
 
     @classmethod
-    def fromMap(self, map):
+    def fromMap(self, data):
+        map=dict(data)
         name = map.get('name')
         id = map.get('id')
         return self(id, name)
