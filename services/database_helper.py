@@ -22,57 +22,57 @@ class DatabaseHelper:
         try:
             cur.executescript('''BEGIN TRANSACTION;
                         CREATE TABLE if not exists "TicketStatus" (
-                        	"Id"	INTEGER,
-                        	"Name"	INTEGER,
-                        	PRIMARY KEY("Id" AUTOINCREMENT)
+                        	"id"	INTEGER,
+                        	"name"	INTEGER,
+                        	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "Gender" (
-                        	"Id"	INTEGER,
-                        	"Name"	INTEGER,
-                        	PRIMARY KEY("Id" AUTOINCREMENT)
+                        	"id"	INTEGER,
+                        	"name"	INTEGER,
+                        	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "User" (
-                        	"Id"	INTEGER,
-                        	"Name"	TEXT NOT NULL,
-                        	"Username"	TEXT NOT NULL,
-                            "Password"	TEXT NOT NULL,
-                        	"Address"	TEXT,
-                        	"Age"	INTEGER,
-                        	"Gender"	INTEGER NOT NULL REFERENCES "Gender"("Id"),
-                        	PRIMARY KEY("Id" AUTOINCREMENT)
+                        	"id"	INTEGER,
+                        	"name"	TEXT NOT NULL,
+                        	"username"	TEXT NOT NULL,
+                            "password"	TEXT NOT NULL,
+                        	"address"	TEXT,
+                        	"age"	INTEGER,
+                        	"gender"	INTEGER NOT NULL REFERENCES "Gender"("id"),
+                        	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "Event" (
-                        	"Id"	INTEGER,
-                        	"Title"	TEXT NOT NULL,
-                        	"Description"	TEXT,
-                        	"StartDate"	INTEGER,
-                        	"EndDate"	INTEGER,
-                        	"Price"	REAL DEFAULT 0.0,
-                        	"Address"	TEXT NOT NULL,
-                        	"CreatedDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
-                        	PRIMARY KEY("Id" AUTOINCREMENT)
+                        	"id"	INTEGER,
+                        	"title"	TEXT NOT NULL,
+                        	"description"	TEXT,
+                        	"startDate"	INTEGER,
+                        	"endDate"	INTEGER,
+                        	"price"	REAL DEFAULT 0.0,
+                        	"address"	TEXT NOT NULL,
+                        	"createdDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
+                        	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "EventCategoryAssociation" (
-                        	"Id"	INTEGER,
-                        	"CategoryId"	INTEGER,
-                        	"EventId"	INTEGER,
-                        	FOREIGN KEY("EventId") REFERENCES "Event"("Id"),
-                        	FOREIGN KEY("CategoryId") REFERENCES "Category"("Id"),
-                        	PRIMARY KEY("Id" AUTOINCREMENT)
+                        	"id"	INTEGER,
+                        	"categoryId"	INTEGER,
+                        	"eventId"	INTEGER,
+                        	FOREIGN KEY("EventId") REFERENCES "Event"("id"),
+                        	FOREIGN KEY("CategoryId") REFERENCES "Category"("id"),
+                        	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "TicketPayment" (
-                        	"Id"	INTEGER,
-                        	"TicketStatusId"	INTEGER NOT NULL,
-                        	"EventId"	INTEGER NOT NULL,
-                        	"UserId"	INTEGER NOT NULL,
-                        	"CreatedDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
-                        	FOREIGN KEY("EventId") REFERENCES "Event"("Id"),
-                        	FOREIGN KEY("UserId") REFERENCES "User"("Id"),
-                        	FOREIGN KEY("TicketStatusId") REFERENCES "TicketStatus"("Id"),
-                        	PRIMARY KEY("Id" AUTOINCREMENT)
+                        	"id"	INTEGER,
+                        	"ticketStatusId"	INTEGER NOT NULL,
+                        	"eventId"	INTEGER NOT NULL,
+                        	"userId"	INTEGER NOT NULL,
+                        	"createdDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
+                        	FOREIGN KEY("EventId") REFERENCES "Event"("id"),
+                        	FOREIGN KEY("UserId") REFERENCES "User"("id"),
+                        	FOREIGN KEY("TicketStatusId") REFERENCES "TicketStatus"("id"),
+                        	PRIMARY KEY("id" AUTOINCREMENT)
                         );
-                        INSERT INTO TicketStatus (Id,Name) VALUES (1,"Pending"),(2,"Approved"),(3,"Rejected");
-                        INSERT INTO Gender (Id,Name) VALUES (1,"Male"),(2,"Female"),(3,"Other");
+                        INSERT INTO TicketStatus (id,Name) VALUES (1,"Pending"),(2,"Approved"),(3,"Rejected");
+                        INSERT INTO Gender (id,Name) VALUES (1,"Male"),(2,"Female"),(3,"Other");
                         COMMIT;
                         ''')   
         except:

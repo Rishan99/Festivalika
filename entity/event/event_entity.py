@@ -1,5 +1,8 @@
+import sqlite3
+
+
 class EventEntity:
-    def __init__(self, id, name, title, address, description, startDate, endDate, price, createdDate):
+    def __init__(self, id, title, address, description, startDate, endDate, price, createdDate):
         self.id = id
         self.title = title
         self.address = address
@@ -9,9 +12,8 @@ class EventEntity:
         self.price = price
         self.createdDate = createdDate
 
-# Class Method, access by Gender.fromMap(), can access and modify class state, where static method cannot
+# Class Method, access by Entity.fromMap(), can access and modify class state, where static method cannot
     @classmethod
-    def fromMap(self, map):
-        name = map.get('name')
-        id = map.get('id')
-        return self(id, name)
+    def fromMap(self, data:sqlite3.Row):
+        map=dict(data)
+        return self(id, map.get('title'),map.get('address'),map.get('description'),map.get('startDate'),map.get('endDate'),map.get('price'),map.get('createdDate'))

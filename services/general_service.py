@@ -19,7 +19,7 @@ class GeneralService:
    
     def getUserById(self,id:str):
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT * from User WHERE Id = ? LIMIT 1''', [id])
+        cur.execute('''SELECT * from User WHERE id = ? LIMIT 1''', [id])
         value =cur.fetchone()
         cur.close()
         if(value == None):

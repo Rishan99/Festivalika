@@ -9,7 +9,6 @@ class EventDetailEntity(EventEntity):
         self.categoryName = 1
         self.ticketStatusName=""
 
-# Class Method, access by Gender.fromMap(), can access and modify class state, where static method cannot
     @classmethod
     def fromMap(self, map):
         name = map.get('name')

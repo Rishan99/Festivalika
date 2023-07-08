@@ -17,7 +17,7 @@ class TicketPaymentService:
             if(self.__checkIfTicketPaymentExists(userId,eventId)):
                 raise Exception("Ticket Already Bought for this event")
             cur= self.databaseHelper.con.cursor()
-            cur.execute('''INSERT INTO TicketPayment (TicketStatusId,EventId,UserId) VALUES (?,?,?)''',[1,eventId,userId])
+            cur.execute('''INSERT INTO TicketPayment (ticketStatusId,eventId,userId) VALUES (?,?,?)''',[1,eventId,userId])
             cur.close()
             return True
         except:
@@ -27,7 +27,7 @@ class TicketPaymentService:
         try:
             ticketInfo = self.getTicketPayementInfo()
             cur= self.databaseHelper.con.cursor()
-            cur.execute('''UPDATE TicketPayment SET TicketStatusId=2 WHERE Id = ?''',[id])
+            cur.execute('''UPDATE TicketPayment SET ticketStatusId=2 WHERE id = ?''',[id])
             cur.close()
             return True
         except:
@@ -37,7 +37,7 @@ class TicketPaymentService:
         try:
             ticketInfo = self.getTicketPayementInfo()
             cur= self.databaseHelper.con.cursor()
-            cur.execute('''UPDATE TicketPayment SET TicketStatusId=3 WHERE Id=?''',[id])
+            cur.execute('''UPDATE TicketPayment SET ticketStatusId=3 WHERE id=?''',[id])
             cur.close()
             return True
         except:
@@ -45,14 +45,14 @@ class TicketPaymentService:
         
     def getTicketPayementInfo(self,id:int):
         cur= self.databaseHelper.con.cursor()
-        cur.execute('SELECT * FROM TicketPayment WHERE Id = ?',[id])
+        cur.execute('SELECT * FROM TicketPayment WHERE id = ?',[id])
         value =cur.fetchone()
         if(value == None):
             raise Exception("Payment information doesnot exists")
         
     def __checkIfTicketPaymentExists(self,userId:int, eventId:int)->bool:
         cur= self.databaseHelper.con.cursor()
-        cur.execute('SELECT Id FROM TicketPayment WHERE UserId = ? AND EventId=?',[userId,eventId])
+        cur.execute('SELECT id FROM TicketPayment WHERE userId = ? AND eventId=?',[userId,eventId])
         value =cur.fetchone()
         return (value != None)
               
