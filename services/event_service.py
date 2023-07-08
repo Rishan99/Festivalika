@@ -64,12 +64,21 @@ class EventService:
         cur.execute('''DELETE Event WHERE id = ?''', [id])
         cur.connection.commit()
     
+    # This retrieves all the events
     def getEventList(self)->list:
         cur= self.databaseHelper.con.cursor()
         cur.execute('''SELECT * from Event''', )
         values =cur.fetchall()
         return list(map(lambda x:EventEntity.fromMap(x),values)) 
     
+    
+    # This retrieves event to display to user, only events that has not ended will be retrived
+    def getEventListForUser(self,currentDate)->list:
+        cur= self.databaseHelper.con.cursor()
+        cur.execute('''SELECT * from Event where endDate>=?''',[str(currentDate)] )
+        values =cur.fetchall()
+        return list(map(lambda x:EventEntity.fromMap(x),values)) 
+   
     def getFilteredEventList(self,query:str,categoryId:int):
         cur= self.databaseHelper.con.cursor()
         cur.execute('''SELECT e.* from Event e INNER JOIN EventCategoryAssociation eca on eca.eventId = e.id WHERE eca.categoryId =? AND e.address Like '%?%' ''',[categoryId,query.strip()] )

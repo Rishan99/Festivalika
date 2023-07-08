@@ -19,7 +19,7 @@ def runUserDashboard():
     global root
     root=Toplevel()
     root.title("ddd")
-    event_list=event_service.getEventList()
+    event_list=event_service.getEventListForUser(datetime.now().isoformat(sep='T').split('T')[0])
     for event in event_list:
         widget=event_widget(root,event)
         widget.pack(anchor="w")
@@ -35,10 +35,7 @@ def event_widget(master,event: EventEntity)->Widget:
     has_event_ended=False
     start_date=datetime.strptime(event.startDate,"%Y-%m-%d")
     end_date=datetime.strptime(event.endDate,"%Y-%m-%d")
-    
-    current_datetime=datetime(2022,2,16)
-    # datetime.now()
-
+    current_datetime= datetime.now()
     if(current_datetime>=start_date):
         has_event_started=True
     if(current_datetime>end_date):
