@@ -15,37 +15,46 @@ from widgets.scrollable import  ScrollbarFrame
 
 event_service = EventService()
 
-root:Toplevel =None
+__root:Toplevel =None
+
+
 
 def runUserDashboard():
-    global root
-    root=Toplevel()
-    root.title("Festivalika")
-    Label(root,text="Events For You",font=font.Font(weight="bold",size=16)).pack()
-    root.grid_rowconfigure(1, weight=1)
-    root.grid_columnconfigure(0, weight=1)
-    event_list=event_service.getEventListForUser(datetime.now())
-
+    global __root
+    __root=Toplevel()
+    __root.title("Festivalika")
+    event_heading()
+    __show_event_list()
+    __root.mainloop()
+    
+def event_heading():
+    Label(__root,text="Events For You",font=font.Font(weight="bold",size=16)).pack()    
+    
+def refresh_event_list():
+    childs = __root.children.copy()
+    for child in childs.values():
+        child.destroy()
+    event_heading()    
+    __show_event_list()
+    
+def __show_event_list():
+    event_list=event_service.getEventListForUser('2022-01-15')
     if(len(event_list)==0):
-        Label(root,text="No Events Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
+        Label(__root,text="No Events Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
     else:    
-        scrollable_body = ScrollbarFrame(root,)
-        scrollable_body.pack(fill='both',expand=1, anchor='e')
-        event_list_frame=scrollable_body.scrolled_frame
+        __scrollable_body = ScrollbarFrame(__root,)
+        __scrollable_body.pack(fill='both',expand=1, anchor='e')
+        event_list_frame=__scrollable_body.scrolled_frame
         for event in event_list:
             event_frame = Frame(event_list_frame)
-            widget=event_widget(event_frame,event)
+            widget=__event_widget(event_frame,event)
             widget.pack(anchor="w",padx=10)
-            # widget.grid(row=row,column=0)
             separator = Separator(event_frame, orient='horizontal')
             separator.pack(fill='x',expand=1,pady=5,padx=10,)
             event_frame.pack(fill='x',expand=1,anchor='w')
-            # separator.pack(fill='x',pady=5,padx=10)
-    root.mainloop()
-    
     
       
-def event_widget(master,event: EventEntity)->Widget:
+def __event_widget(master,event: EventEntity)->Widget:
     has_event_started=False
     has_event_ended=False
     start_date=datetime.strptime(event.startDate,"%Y-%m-%d")
