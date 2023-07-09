@@ -12,7 +12,6 @@ class ScrollbarFrame(tk.Frame):
         # The Scrollbar, layout to the right
         vsb = tk.Scrollbar(self, orient="vertical")
         vsb.pack(side="right", fill="y")
-        print(parent.winfo_width())
         # The Canvas which supports the Scrollbar Interface, layout to the left
         self.canvas = tk.Canvas(self, borderwidth=0, )
         self.canvas.pack(side="left", fill="both", expand=True)

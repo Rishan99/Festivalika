@@ -37,7 +37,10 @@ def refresh_event_list():
         child.destroy()
     event_heading()    
     __show_event_list()
-    
+
+def __on_event_pressed(event_id:int):
+    runEventDetail(event_id)
+
 def __show_event_list():
     event_list=event_service.getEventListForUser('2022-01-15')
     if(len(event_list)==0):
@@ -50,12 +53,12 @@ def __show_event_list():
             event_frame = Frame(event_list_frame)
             widget=__event_widget(event_frame,event)
             event_frame.bind("<Button-1>",lambda event, id=event.id: __on_event_pressed(id))
+            widget.bind("<Button-1>",lambda event, id=event.id: __on_event_pressed(id))
             widget.pack(anchor="w",padx=10)
             separator = Separator(event_frame, orient='horizontal')
             separator.pack(fill='x',expand=1,pady=5,padx=10,)
             event_frame.pack(fill='x',expand=1,anchor='w')
-def __on_event_pressed(event_id:int):
-    runEventDetail(event_id)    
+    
       
 def __event_widget(master,event: EventEntity)->Widget:
     has_event_started=False
