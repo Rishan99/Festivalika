@@ -11,6 +11,8 @@ from services.auth_service import AuthService
 from services.event_service import EventService
 from datetime import datetime
 
+
+
 from widgets.scrollable import  ScrollbarFrame
 
 
@@ -42,7 +44,7 @@ def __on_event_pressed(event_id:int):
     runEventDetail(event_id)
 
 def __show_event_list():
-    event_list=event_service.getEventListForUser('2022-01-15')
+    event_list=event_service.getEventListForUser(datetime.now())
     if(len(event_list)==0):
         Label(__root,text="No Events Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
     else:    
@@ -61,29 +63,10 @@ def __show_event_list():
     
       
 def __event_widget(master,event: EventEntity)->Widget:
-    has_event_started=False
-    has_event_ended=False
-    start_date=datetime.strptime(event.startDate,"%Y-%m-%d")
-    end_date=datetime.strptime(event.endDate,"%Y-%m-%d")
-    current_datetime= datetime.now()
-    if(current_datetime>=start_date):
-        has_event_started=True
-    if(current_datetime>end_date):
-        has_event_ended=True
-        
     event_frame = Frame(master=master)
     title_label=Label(event_frame,text=event.title,font=('Arial',14),anchor="w")
     address_label=Label(event_frame,text=event.address,font=('Arial',10,))
-    status_text:str|None
-    if(not has_event_started):
-        status_text = f"Event starts in {(start_date - current_datetime).days} days"
-    elif(has_event_started and not has_event_ended):
-        if(current_datetime==end_date):
-            status_text = f"Event Ends Today" 
-        else:
-            status_text = f"Event Ends in {(end_date - current_datetime).days} days"       
-    else:    
-        status_text = f"Event Ended {(current_datetime - end_date).days} days ago"   
+    status_text=event.event_status_text()
     frame1 = Frame(master=event_frame)       
     status_label = Label(frame1,text=status_text,font=font.Font(weight="bold",size=10))
     price_label=Label(frame1,text="Price: "+str(event.price),)

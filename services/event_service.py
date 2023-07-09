@@ -1,6 +1,7 @@
 
 
 
+from  datetime import datetime
 from entity.event.event_detail_entity import EventDetailEntity
 from entity.event.event_entity import EventEntity
 from services.database_helper import DatabaseHelper
@@ -48,16 +49,21 @@ class EventService:
         cur.close()           
 
     def getEventByIdWithTicketStatus(self,id:int,userId:int):
+        current_date=datetime.now()
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.*,tp.TicketStatusId as ticketStatusId, ts.Name as ticketStatusName from Event e 
-                    INNER JOIN TicketPayment tp on tp.eventId = e.Id
-                    INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
-                    WHERE e.id = ? AND e.userId = ? LIMIT 1''', [id,userId])
+        cur.execute('''SELECT e.*,tp.TicketStatusId as ticketStatusId, ts.Name as ticketStatusName, 
+                    (CASE WHEN (tp.id is null AND (e.startDate<=? AND e.endDate>=?)) THEN 1 ELSE 0 END) as canBuyTicket
+                    from Event e 
+                    LEFT JOIN TicketPayment tp on tp.eventId = e.Id AND tp.userId = ?
+                    LEFT JOIN TicketStatus ts on ts.id = tp.ticketStatusId
+                    WHERE e.id = ?  LIMIT 1''', [current_date,current_date,userId,id])
         value =cur.fetchone()
         cur.close()
         if(value == None):
             raise Exception ("Event Not Found")
         return EventDetailEntity.fromMap(value)   
+    
+    
     
     def deleteEvent(self,id:int):
         cur= self.databaseHelper.con.cursor()
@@ -85,8 +91,19 @@ class EventService:
         values =cur.fetchall()
         return list(map(lambda x:EventEntity.fromMap(x),values) )
         
-    def allowToByTicket(self,eventId:int)->bool:
-        return True
+    def allowToBuyTicket(self,userId:int,eventId:int)->bool:
+        current_date=datetime.now()
+        cur= self.databaseHelper.con.cursor()
+        cur.execute('''SELECT (CASE WHEN (tp.id is null AND (e.startDate<=? AND e.endDate>=?)) THEN 1 ELSE 0 END) as canBuyTicket
+                    from Event e 
+                    LEFT JOIN TicketPayment tp on tp.eventId = e.Id AND tp.userId = ?
+                    LEFT JOIN TicketStatus ts on ts.id = tp.ticketStatusId
+                    WHERE e.id = ? LIMIT 1''', [current_date,current_date,userId,eventId])
+        value =cur.fetchone()
+        cur.close()
+        if(value == None):
+            return False
+        return dict(value).get("canBuyTicket")==1
               
                       
    
