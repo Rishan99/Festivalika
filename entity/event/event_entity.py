@@ -16,4 +16,4 @@ class EventEntity:
     @classmethod
     def fromMap(self, data:sqlite3.Row):
         map=dict(data)
-        return self(id, map.get('title'),map.get('address'),map.get('description'),map.get('startDate'),map.get('endDate'),map.get('price'),map.get('createdDate'))
+        return self(map.get('id'), map.get('title'),map.get('address'),map.get('description'),map.get('startDate'),map.get('endDate'),map.get('price'),map.get('createdDate'))
