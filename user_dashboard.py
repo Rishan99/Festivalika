@@ -10,6 +10,8 @@ from services.auth_service import AuthService
 from services.event_service import EventService
 from datetime import datetime
 
+from widgets.scrollable import  ScrollbarFrame
+
 
 event_service = EventService()
 
@@ -18,14 +20,27 @@ root:Toplevel =None
 def runUserDashboard():
     global root
     root=Toplevel()
-    root.title("ddd")
-    event_list=event_service.getEventListForUser(datetime.now().isoformat(sep='T').split('T')[0])
-    for event in event_list:
-        widget=event_widget(root,event)
-        widget.pack(anchor="w")
-        separator = Separator(root, orient='horizontal')
-        separator.pack(fill='x',pady=5)
-        
+    root.title("Festivalika")
+    Label(root,text="Events For You",font=font.Font(weight="bold",size=16)).pack()
+    root.grid_rowconfigure(1, weight=1)
+    root.grid_columnconfigure(0, weight=1)
+    event_list=event_service.getEventListForUser(datetime.now())
+
+    if(len(event_list)==0):
+        Label(root,text="No Events Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
+    else:    
+        scrollable_body = ScrollbarFrame(root,)
+        scrollable_body.pack(fill='both',expand=1, anchor='e')
+        event_list_frame=scrollable_body.scrolled_frame
+        for event in event_list:
+            event_frame = Frame(event_list_frame)
+            widget=event_widget(event_frame,event)
+            widget.pack(anchor="w",padx=10)
+            # widget.grid(row=row,column=0)
+            separator = Separator(event_frame, orient='horizontal')
+            separator.pack(fill='x',expand=1,pady=5,padx=10,)
+            event_frame.pack(fill='x',expand=1,anchor='w')
+            # separator.pack(fill='x',pady=5,padx=10)
     root.mainloop()
     
     
@@ -53,7 +68,7 @@ def event_widget(master,event: EventEntity)->Widget:
         else:
             status_text = f"Event Ends in {(end_date - current_datetime).days} days"       
     else:    
-        status_text = f"Event Ended {(end_date - current_datetime).days} days ago"   
+        status_text = f"Event Ended {(current_datetime - end_date).days} days ago"   
     frame1 = Frame(master=event_frame)       
     status_label = Label(frame1,text=status_text,font=font.Font(weight="bold",size=10))
     price_label=Label(frame1,text="Price: "+str(event.price),)
@@ -67,4 +82,4 @@ def event_widget(master,event: EventEntity)->Widget:
     return event_frame
     
 if(__name__=="__main__"):
-    runUserDashboard()    
+    runUserDashboard()   
