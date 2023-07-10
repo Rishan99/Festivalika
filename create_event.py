@@ -6,6 +6,7 @@ from PIL import ImageTk,Image
 from assets import *
 from entity.event.event_entity import EventEntity
 from entity.user_entity import UserEntity
+from helper import convert_datetime_from_database, convert_datetime_to_default
 from services.event_service import EventService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
@@ -98,12 +99,18 @@ def run(id:int|None=None):
     # Getting details of event Id is event Id is not null, means that this GUI is for upadting event
     if(event_id is not None):
         event_detail:EventEntity=eventService.getEventById(event_id)
+        selected_categories:list=eventService.getCateoriesListByEventId(event_id)
+        for cat in selected_categories:
+            try:
+                list_box.select_set(list(list_box.get(0,END)).index(cat.name))
+            except:
+                pass    
         title_var.set(event_detail.title)  
         description_entry.insert("0.0",event_detail.description)
         price_var.set(event_detail.price)  
         address_var.set(event_detail.address)  
-        start_date_var.set(datetime.strptime(event_detail.startDate,'%Y-%m-%d %H:%M:%S').strftime("%m/%d/%y ")) 
-        end_date_var.set(datetime.strptime(event_detail.endDate,'%Y-%m-%d %H:%M:%S').strftime("%m/%d/%y")) 
+        start_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.startDate))) 
+        end_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
         
     __root.mainloop()
 
@@ -147,5 +154,5 @@ def defineEntryBoxPlace(row:int,widget:Widget,col:int|None=0):
     widget.grid(row=row,column=col,sticky='nw',padx=25,ipady=8,)
     
 if(__name__=="__main__"):    
-    run()
+    run(1)
   

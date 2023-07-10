@@ -2,6 +2,8 @@
 import sqlite3
 from datetime import datetime
 
+from helper import convert_datetime_from_database
+
 
 class EventEntity:
     def __init__(self, id, title, address, description, startDate, endDate, price, createdDate):
@@ -17,8 +19,8 @@ class EventEntity:
     def event_status_text(self)->str:
         has_event_started=False
         has_event_ended=False
-        start_date=datetime.strptime(self.startDate,"%Y-%m-%d")
-        end_date=datetime.strptime(self.endDate,"%Y-%m-%d")
+        start_date=convert_datetime_from_database(self.startDate)
+        end_date=convert_datetime_from_database(self.endDate)
         current_datetime= datetime.now()
         if(current_datetime>=start_date):
             has_event_started=True
@@ -30,7 +32,7 @@ class EventEntity:
             if(current_datetime==end_date):
                 status_text = f"Event Ends Today" 
             else:
-                status_text = f"Event Ends in {(end_date - current_datetime).days} days"       
+                status_text = f"Event Ends in {(end_date - current_datetime).days+1} days"       
         else:    
             status_text = f"Event Ended {(current_datetime - end_date).days} days ago"    
         return status_text      
