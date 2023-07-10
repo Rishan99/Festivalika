@@ -6,6 +6,7 @@ from tkinter.ttk import Separator
 from entity.ticket_payment_entity import TicketPaymentEntity
 from services.ticket_payment_service import TicketPaymentService
 from services.user_provider import UserProvider
+from utility.helper import error_message_box
 from widgets.scrollable import  ScrollbarFrame
 
 ticket_payment_service = TicketPaymentService()
@@ -58,26 +59,42 @@ def __ticket_widget(master,ticket_payment: TicketPaymentEntity)->Widget:
     approve_button=Button(ticket_payment_frame,text="Approve",command=lambda i=ticket_payment.id:approve_ticket(i))
     reject_button=Button(ticket_payment_frame,text="Reject",command=lambda i=ticket_payment.id:reject_ticket(i))
     delete_button=Button(ticket_payment_frame,text="Delete",command=lambda i=ticket_payment.id:delete_ticket(i))
-    if(ticket_payment.ticketStatusId == 1):
-        approve_button.grid(row=3,column=0)
-        reject_button.grid(row=3,column=1)
-        delete_button.grid(row=3,column=2)
-    elif(ticket_payment.ticketStatusId==3):
-        delete_button.grid(row=3,column=0)
+    if(UserProvider().user.isAdmin):
+        if(ticket_payment.ticketStatusId == 1):
+            approve_button.grid(row=3,column=0)
+            reject_button.grid(row=3,column=1)
+            delete_button.grid(row=3,column=2)
+        elif(ticket_payment.ticketStatusId==3):
+            delete_button.grid(row=3,column=0)
     return ticket_payment_frame
 
 def approve_ticket(ticket_id:int):
-    ticket_payment_service.approveEventTicket(ticket_id)
-    __refresh_ticket_list()
-
+    callback = mb.askyesno(title="Confirm",message="Are you sure you want to approve this payment")
+    if(callback):
+        try:
+            ticket_payment_service.approveEventTicket(ticket_id)
+            __refresh_ticket_list()
+        except BaseException as ex:
+            error_message_box(title="Error",message=str(ex)) 
 
 def delete_ticket(ticket_id:int):
-    ticket_payment_service.deleteEventTicket(ticket_id)
-    __refresh_ticket_list()
-
+    callback = mb.askyesno(title="Confirm",message="Are you sure you want to delete this payment")
+    if(callback):
+        try:
+            ticket_payment_service.deleteEventTicket(ticket_id)
+            __refresh_ticket_list()
+        except BaseException as ex:
+            error_message_box(title="Error",message=str(ex)) 
+            
+            
 def reject_ticket(ticket_id:int):
-    ticket_payment_service.rejectEventTicket(ticket_id)
-    __refresh_ticket_list()
+    callback = mb.askyesno(title="Confirm",message="Are you sure you want to reject this payment")
+    if(callback):
+        try:
+            ticket_payment_service.rejectEventTicket(ticket_id)
+            __refresh_ticket_list()
+        except BaseException as ex:
+            error_message_box(title="Error",message=str(ex))    
     
 if(__name__=="__main__"):
     run()   

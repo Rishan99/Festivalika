@@ -6,7 +6,7 @@ from PIL import ImageTk,Image
 from utility.assets import *
 from entity.event.event_entity import EventEntity
 from entity.user_entity import UserEntity
-from utility.helper import convert_datetime_from_database, convert_datetime_to_default
+from utility.helper import convert_datetime_from_database, convert_datetime_to_default, error_message_box, success_message_box
 from services.event_service import EventService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
@@ -121,12 +121,12 @@ def __create_or_update_event(title:str,address:str,price:str,description:str,sta
         is_validation_success=__validate_data(entity) 
         if(event_id is None):
             eventService.addEvent(entity,category_list)
-            mb.showinfo(title="Success",message="Event has been added")
+            success_message_box("Event has been added")
         else:
             eventService.updateEvent(entity,category_list)
-            mb.showinfo(title="Success",message="Event has been updated")
+            success_message_box("Event has been updated")
     except BaseException as ex:
-        mb.showerror(title="Error",message=str(ex))   
+        error_message_box(str(ex)) 
 
 
 def __validate_data( entity:EventEntity):

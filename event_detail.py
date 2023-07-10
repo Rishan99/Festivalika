@@ -12,6 +12,7 @@ from services.event_service import EventService
 from datetime import datetime
 from services.ticket_payment_service import TicketPaymentService
 from services.user_provider import UserProvider
+from utility.helper import error_message_box
 from widgets.scrollable import  ScrollbarFrame
 
 
@@ -68,7 +69,7 @@ def __buy_ticket():
         ticket_service.buyEventTicket(UserProvider().user.id,__event_id)
         refresh_ticket_status()
     except BaseException as ex:
-        mb.showerror(title="Error",message=str(ex))
+        error_message_box(str(ex))
 
 def refresh_ticket_status():
     global __ticket_button,__event

@@ -8,6 +8,7 @@ from services.auth_service import AuthService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
 from user_dashboard import run
+from utility.helper import error_message_box
 authService = AuthService()
 
 genderList:list=GeneralService().getGenderList()
@@ -61,7 +62,7 @@ def loginPage():
            loginWindow.destroy()
            run()
         except BaseException as error:
-            mb.showerror(message=str(error),title="Error")   
+            error_message_box(str(error))
     
     loginButton=Button(loginFormFrame,text="Login",fg="white",bg="#6a3bff",command=onLogin)
     loginButton.grid(row=6,column=0,columnspan=2,sticky="nwe",ipady=8)
@@ -154,7 +155,7 @@ def __registerPage():
             loginPage()
         #     runUserDashboard()
         except BaseException as error:
-            mb.showerror(message=str(error),title="Error")  
+            error_message_box(str(error))  
     registerButton=Button(registerFrame,text="Sign up",font=("arial",10,"bold"),bg="#6a3bff",fg="white",command=onRegister)
     registerButton.grid(row=row,column=0,sticky='wen',padx=25,pady=25,ipady=12)
     
