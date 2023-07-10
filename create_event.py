@@ -23,7 +23,7 @@ def run(id:int|None=None):
     """ 
     Pass [id] if you want to update event, else pass as None to create a new event
     """
-    global event_id
+    global event_id,categoryList
     event_id=id
     global __root
     __root = Tk()
@@ -32,20 +32,8 @@ def run(id:int|None=None):
     address_var=StringVar(__root)
     start_date_var=StringVar(__root)
     end_date_var=StringVar(__root)
-    
-      
     event_detail_frame=LabelFrame(__root,bg="#d8d8d8",border=0)
     event_detail_frame.grid(row=0,column=0,ipady=90)
-
-    # Configure frame
-    # event_detail_frame.columnconfigure(1,weight=1)
-    # event_detail_frame.rowconfigure(tuple(range(15)),weight=1)
-    # genderVar=StringVar(value="Select a gender")
-    # def onGenderSelect(x):
-    #     nonlocal genderId
-    #     gender=next(filter(lambda z:z.name == x,genderList), None)
-    #     if(gender is not None):
-    #         genderId=gender.id
 
     # widgets inside frame
     Label(event_detail_frame,text="Create Event" if event_id is None else "Update Event",font=('Arial',"18","bold"),bg='#d8d8d8',fg="#6a3bff").grid(row=0,column=0,sticky='sw',padx=25,ipady=7)
@@ -79,14 +67,32 @@ def run(id:int|None=None):
     row+=1
     end_date_entry = DateEntry(event_detail_frame,width=47,textvariable=end_date_var)
     defineEntryBoxPlace(row,end_date_entry)
-    row+=2
+    row+=1
+    #  
+    placeTitle(event_detail_frame,"Categories",row)
+    row+=1
+    list_box:Listbox=None
+    if(len(categoryList)>0):
+        category_list_frame=Frame(event_detail_frame)
+        scrollbar = Scrollbar(category_list_frame)
+        list_box=Listbox(category_list_frame,selectmode=MULTIPLE,width=50,height=4,)
+        scrollbar.pack(side = RIGHT, fill = BOTH)
+        list_box.pack(side = LEFT, fill = BOTH)
+        list_box.config(yscrollcommand = scrollbar.set)
+        scrollbar.config(command = list_box.yview)
+        for c in range(len(categoryList)):
+            list_box.insert(c,categoryList[c].name)
+        defineEntryBoxPlace(row,category_list_frame)
+        row+=3
     # 
     placeTitle(event_detail_frame,"Description",1,1)
     description_entry=Text(event_detail_frame,width=50,border=0,)
     description_entry.grid(row=2,column=1,sticky='nw',padx=25,ipady=8,rowspan=10,columnspan=1)
     # 
     loginButton=Button(event_detail_frame,text="Create Event" if event_id is None else "Update Event",fg="white",bg="#6a3bff",command=lambda :
-        create_or_update_event(title_entry.get(),address_entry.get(),price_entry.get(),description_entry.get("0.0",END),start_date_entry.get(),end_date_entry.get()))
+        __create_or_update_event(title_entry.get(),address_entry.get(),price_entry.get(),description_entry.get("0.0",END),
+                                 start_date_entry.get(),end_date_entry.get(),list(map(lambda x:next(filter(lambda z:z.name == list_box.get(x),categoryList)).id,
+                                 list_box.curselection()))))
     loginButton.grid(row=row,column=0,columnspan=2,sticky="s",ipady=8,pady=15,ipadx=60)
     
     # Getting details of event Id is event Id is not null, means that this GUI is for upadting event
@@ -98,17 +104,19 @@ def run(id:int|None=None):
         address_var.set(event_detail.address)  
         start_date_var.set(datetime.strptime(event_detail.startDate,'%Y-%m-%d %H:%M:%S').strftime("%m/%d/%y ")) 
         end_date_var.set(datetime.strptime(event_detail.endDate,'%Y-%m-%d %H:%M:%S').strftime("%m/%d/%y")) 
+        
     __root.mainloop()
+
     
-def create_or_update_event(title:str,address:str,price:str,description:str,start_date:str,end_date:str):
+def __create_or_update_event(title:str,address:str,price:str,description:str,start_date:str,end_date:str,category_list:list):
     try:
-        entity=EventEntity(event_id,title,address,description,str(start_date),str(end_date),float(price),"" )
+        entity=EventEntity(event_id,title,address,description,str(start_date),str(end_date),(price),"" )
         is_validation_success=__validate_data(entity) 
         if(event_id is None):
-            eventService.addEvent(entity,[])
+            eventService.addEvent(entity,category_list)
             mb.showinfo(title="Success",message="Event has been added")
         else:
-            eventService.updateEvent(entity,[])
+            eventService.updateEvent(entity,category_list)
             mb.showinfo(title="Success",message="Event has been updated")
     except BaseException as ex:
         mb.showerror(title="Error",message=str(ex))   
