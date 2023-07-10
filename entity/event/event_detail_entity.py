@@ -2,16 +2,16 @@ from entity.event.event_entity import EventEntity
 
 
 class EventDetailEntity(EventEntity):
-    def __init__(self, id, name):
-        self.canBuyTicket = False
-        self.ticketStatusId = 1
-        self.categoryId = 1
-        self.categoryName = 1
-        self.ticketStatusName=""
+    def __init__(self,id, title, address, description, startDate, endDate, price, createdDate, canBuyTicket, ticketStatusId,categoryId,categoryName,ticketStatusName):
+        super().__init__(id, title, address, description, startDate, endDate, price, createdDate,)
+        self.canBuyTicket = canBuyTicket ==1
+        self.ticketStatusId =ticketStatusId
+        self.categoryId = categoryId
+        self.categoryName =categoryName
+        self.ticketStatusName=ticketStatusName
+        
 
-# Class Method, access by Gender.fromMap(), can access and modify class state, where static method cannot
     @classmethod
-    def fromMap(self, map):
-        name = map.get('name')
-        id = map.get('id')
-        return self(id, name)
+    def fromMap(self, data):
+        map=dict(data)
+        return self(map.get('id'), map.get('title'),map.get('address'),map.get('description'),map.get('startDate'),map.get('endDate'),map.get('price'),map.get('createdDate'),map.get("canBuyTicket"), map.get("ticketStatusId"), map.get("categoryId"), map.get("categoryName"), map.get("ticketStatusName"))

@@ -1,5 +1,6 @@
 
 
+from entity.category_entity import CategoryEntity
 from entity.gender_entity import GenderEntity
 from entity.user_entity import UserEntity
 from services.database_helper import DatabaseHelper
@@ -15,11 +16,18 @@ class GeneralService:
         cur.execute('''SELECT * from Gender''')
         value =cur.fetchall()
         cur.close()
-        return map(lambda x: GenderEntity.fromMap(x),value)
+        return list(map(lambda x: GenderEntity.fromMap(x),value))
+
+    def getCategoryList(self,)->bool:
+        cur= self.databaseHelper.con.cursor()
+        cur.execute('''SELECT * from Category''')
+        value =cur.fetchall()
+        cur.close()
+        return list(map(lambda x: CategoryEntity.fromMap(x),value))    
    
     def getUserById(self,id:str):
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT * from User WHERE Id = ? LIMIT 1''', [id])
+        cur.execute('''SELECT * from User WHERE id = ? LIMIT 1''', [id])
         value =cur.fetchone()
         cur.close()
         if(value == None):

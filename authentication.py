@@ -35,17 +35,13 @@ def __registerPage():
 
     # widgets inside frame
     Label(registerFrame,text="Sign up",font=('Arial',"18","bold"),bg='#d8d8d8',fg="#6a3bff").grid(row=0,column=0,sticky='sw',padx=25,ipady=7)
-
     Label(registerFrame,text="Email",font=('Arial',10,'bold'),bg='#d8d8d8').grid(row=1,column=0,sticky='sw',padx=25)
-
     emailAddressEntry=Entry(registerFrame,width=50,border=0)
     emailAddressEntry.grid(row=2,column=0,sticky='nw',padx=25,ipady=8)
     Label(registerFrame,text="Password",font=('Arial',10,'bold'),bg='#d8d8d8').grid(row=3,column=0,sticky='sw',padx=25)
-
     passwordEntry=Entry(registerFrame,width=50,border=0)
     passwordEntry.grid(row=4,column=0,sticky='nw',padx=25,ipady=8)
     Label(registerFrame,text="Confirm Password",font=('Arial',10,'bold'),bg='#d8d8d8').grid(row=5,column=0,sticky='sw',padx=25)
-
     confirmPasswordEntry=Entry(registerFrame,width=50,border=0)
     confirmPasswordEntry.grid(row=6,column=0,sticky='nw',padx=25,ipady=8)
     registerButton=Button(registerFrame,text="Sign up",font=("arial",10,"bold"),bg="#6a3bff",fg="white")
@@ -53,6 +49,7 @@ def __registerPage():
     registerWindow.mainloop()
   
   
+
   
 def loginPage(): 
     loginWindow = __configureTopWindow()
@@ -65,6 +62,7 @@ def loginPage():
     loginFormFrame.pack(side="right",expand=True,fill=BOTH,pady=100)
     imageFrame=LabelFrame(loginWindow,border=0)
     imageFrame.pack(side="left",expand=True,fill=BOTH)
+    
     # for image
     loginImg=ImageTk.PhotoImage(Image.open(Login_Background).resize((1300,750),Image.LANCZOS))
     Label(imageFrame,image=loginImg).pack(expand=1,fill=BOTH)
@@ -88,14 +86,13 @@ def loginPage():
     # Function to call when press [Login] button
     def onLogin():
         try:
+            # emailAddress.get1()
             authService.loginUser(emailAddress.get(),password.get())
-        except BaseException as er:
-            mb.showerror(message=str(er),title="Error")   
+        except BaseException as error:
+            mb.showerror(message=str(error),title="Error")   
     
     loginButton=Button(loginFormFrame,text="Login",fg="white",bg="#6a3bff",command=onLogin)
     loginButton.grid(row=6,column=0,columnspan=2,sticky="nwe",ipady=8)
     Label(loginFormFrame,text="Don't have an account?",font=('Arial',8,'bold'),bg="#ffffff").grid(row=7,column=0,sticky="ne")
     Button(loginFormFrame,text="Register",bg="#ffffff",font=('Arial',8,'bold'),fg="#6a3bff",border=0,command=onRegisterPressed).grid(row=7,column=1,sticky="nw")
     loginWindow.mainloop()
-    
-
