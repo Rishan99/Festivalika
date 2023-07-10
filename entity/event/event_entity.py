@@ -2,7 +2,7 @@
 import sqlite3
 from datetime import datetime
 
-from helper import convert_datetime_from_database
+from utility.helper import convert_datetime_from_database
 
 
 class EventEntity:

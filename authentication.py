@@ -2,7 +2,7 @@
 from tkinter import *
 from tkinter import messagebox as mb
 from PIL import ImageTk,Image
-from assets import *
+from utility.assets import *
 from entity.user_entity import UserEntity
 from services.auth_service import AuthService
 from services.general_service import GeneralService

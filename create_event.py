@@ -3,16 +3,16 @@ from datetime import datetime
 from tkinter import *
 from tkinter import messagebox as mb
 from PIL import ImageTk,Image
-from assets import *
+from utility.assets import *
 from entity.event.event_entity import EventEntity
 from entity.user_entity import UserEntity
-from helper import convert_datetime_from_database, convert_datetime_to_default
+from utility.helper import convert_datetime_from_database, convert_datetime_to_default
 from services.event_service import EventService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
 from user_dashboard import run
 from tkcalendar import Calendar, DateEntry
-from validator import float_validator, empty_validator
+from utility.validator import float_validator, empty_validator
 eventService = EventService()
 categoryList:list=GeneralService().getCategoryList()
 

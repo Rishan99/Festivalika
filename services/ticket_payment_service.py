@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from entity.event.event_detail_entity import EventDetailEntity
+from entity.ticket_payment_entity import TicketPaymentEntity
 from services.database_helper import DatabaseHelper
 
 from services.event_service import EventService
@@ -24,25 +25,27 @@ class TicketPaymentService:
         
     def getUserTicketListWithEvent(self,userId:int)->list:
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.*,tp.TicketStatusId as ticketStatusId, ts.Name as ticketStatusName, 0 as canBuyTicket
+        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name, tp.createdDate
                     from TicketPayment tp 
-                    INNER JOIN Event e on tp.eventId = e.Id AND tp.userId = ?
+                    INNER JOIN Event e on tp.eventId = e.Id
                     INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
-                    WHERE tp.userId = ?''', [userId,userId])
+                    INNER JOIN User u on u.id = tp.userId
+                    WHERE tp.userId = ?''', [userId])
         values =cur.fetchall()
         cur.close()
         return list(map(lambda x:EventDetailEntity.fromMap(x),values ))  
      
-    def getAllTicketListWithEvent(self)->list:
+    def getAllTicketList(self)->list:
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.*,tp.TicketStatusId as ticketStatusId, ts.Name as ticketStatusName, 0 as canBuyTicket
+        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name, tp.createdDate
                     from TicketPayment tp 
                     INNER JOIN Event e on tp.eventId = e.Id
                     INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
+                    INNER JOIN User u on u.id = tp.userId
                     ''',)
         values =cur.fetchall()
         cur.close()
-        return list(map(lambda x:EventDetailEntity.fromMap(x),values ))    
+        return list(map(lambda x:TicketPaymentEntity.fromMap(x),values ))    
           
     def approveEventTicket(self,id:int)->bool:
         ticketInfo = self.getTicketPayementInfo()
