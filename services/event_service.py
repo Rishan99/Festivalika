@@ -85,9 +85,13 @@ class EventService:
         values =cur.fetchall()
         return list(map(lambda x:EventEntity.fromMap(x),values)) 
    
-    def getFilteredEventList(self,query:str,categoryId:int):
+#    [currentDate]=None for admin
+    def getFilteredEventList(self,currentDate,query:str,categoryId:int):
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.* from Event e INNER JOIN EventCategoryAssociation eca on eca.eventId = e.id WHERE eca.categoryId =? AND e.address Like '%?%' ''',[categoryId,query.strip()] )
+        cur.execute('''SELECT e.* from Event e INNER JOIN EventCategoryAssociation eca on eca.eventId = e.id WHERE '''
+                    +str("1" if currentDate is None else f'''endDate >='{str(currentDate)}' AND ''')
+                    +str("1" if categoryId is None else f'''eca.categoryId = {categoryId}''')
+                    +str("" if len(query.strip())==0 else f''' AND e.address Like '%{query.strip()}%' ''',))
         values =cur.fetchall()
         return list(map(lambda x:EventEntity.fromMap(x),values) )
         

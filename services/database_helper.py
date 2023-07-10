@@ -52,6 +52,11 @@ class DatabaseHelper:
                         	"address"	TEXT NOT NULL,
                         	"createdDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
                         	PRIMARY KEY("id" AUTOINCREMENT)
+                        );     
+                        CREATE TABLE if not exists "Category" (
+                        	"id"	INTEGER,
+                        	"name"	INTEGER,
+                        	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "EventCategoryAssociation" (
                         	"id"	INTEGER,
@@ -72,7 +77,7 @@ class DatabaseHelper:
                         	FOREIGN KEY("TicketStatusId") REFERENCES "TicketStatus"("id"),
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );
-                        
+                        INSERT INTO Category (id,name) VALUES (1,"Music"),(2,"Movies"),(3,"Football"),(4,"Drama");
                         INSERT INTO TicketStatus (id,name) VALUES (1,"Pending"),(2,"Approved"),(3,"Rejected");
                         INSERT INTO Gender (id,name) VALUES (1,"Male"),(2,"Female"),(3,"Other");
                         INSERT INTO User(name,username,password,address,age,isAdmin,gender) VALUES ("admin","admin","admin","",0,1,1);
