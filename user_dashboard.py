@@ -3,32 +3,32 @@ from tkinter import *
 from tkinter import font
 from tkinter import messagebox as mb
 from tkinter.ttk import Separator
-from PIL import ImageTk,Image
-from assets import *
+
 from entity.event.event_entity import EventEntity
-from event_detail import runEventDetail
-from services.auth_service import AuthService
+# from event_detail import runEventDetail
 from services.event_service import EventService
 from datetime import datetime
 from services.general_service import GeneralService
-
+from services.user_provider import UserProvider
 from widgets.scrollable import  ScrollbarFrame
-
 
 event_service = EventService()
 general_service = GeneralService()
 
-__root:Toplevel =Tk()
-__event_list_data_frame=Frame(__root,width=9999)
+__root:Toplevel =None
+__event_list_data_frame:Frame=None
 dropdown_options = [
 ]   
 selectedCategory=None
-categoryVar = StringVar(value="Select a category")
+categoryVar=None
 
 
 def runUserDashboard():
-    global __root,dropdown_options
-    __root.title("Festivalika")
+    global __root,dropdown_options,categoryVar
+    __root =Tk()
+    categoryVar= StringVar(__root,value="Select a category")
+    __event_list_data_frame=Frame(__root,width=9999)
+    __root.title(str(UserProvider().user.isAdmin))
     dropdown_options=list(map(lambda x:x.name,general_service.getCategoryList()))
     __event_heading()
     __showDropDown()
@@ -56,7 +56,8 @@ def refresh_event_list():
     __show_event_list()
 
 def __on_event_pressed(event_id:int):
-    runEventDetail(event_id)
+    # runEventDetail(event_id)
+    pass
 
 def __show_event_list():
     event_list=event_service.getFilteredEventList(datetime.now(),"",selectedCategory)
@@ -93,5 +94,5 @@ def __event_widget(master,event: EventEntity)->Widget:
     description_label.grid(row=3,column=0,sticky="w")
     return event_frame
     
-if(__name__=="__main__"):
-    runUserDashboard()   
+# if(__name__=="__main__"):
+#     runUserDashboard()   

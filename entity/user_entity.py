@@ -1,12 +1,12 @@
 class UserEntity:
-    def __init__(self, name,username,address,age,gender,password=None,id=None,):
+    def __init__(self, name,username,address,gender,isAdmin,password=None,id=None,):
         self.name = name
         self.username = username
         self.address = address
-        self.age = age
         self.gender = gender
         self.id = id
         self.password = password
+        self.isAdmin = isAdmin==1
 
     @classmethod
     def fromMap(self, data):
@@ -15,7 +15,7 @@ class UserEntity:
         id = map.get('id')
         username = map.get('username')
         address = map.get('address')
-        age = map.get('age')
         gender = map.get('gender')   
-        password = map.get('password')        
-        return self(name,username,address,age,gender,password,id,)        
+        password = map.get('password') 
+        isAdmin = map.get('isAdmin')        
+        return self(name,username,address,gender,isAdmin,password,id,)        

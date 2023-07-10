@@ -39,7 +39,7 @@ class AuthService:
         if(self.__checkUsernameExists(user.username)):
             raise Exception("Sorry, Username already exists")  
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''INSERT INTO User (name,username,address,age,gender,password) VALUES (?,?,?,?,?,?)''', [user.name,user.username,user.address,user.age,user.gender,user.password])
+        cur.execute('''INSERT INTO User (name,username,address,gender,password) VALUES (?,?,?,?,?)''', [user.name,user.username,user.address,user.gender,user.password])
         cur.connection.commit()
         cur.close()   
                    
