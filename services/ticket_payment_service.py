@@ -22,17 +22,28 @@ class TicketPaymentService:
         cur.connection.commit()
         cur.close()
         
-    def getTicketListWithEvent(self,id:int,userId:int)->list:
+    def getUserTicketListWithEvent(self,userId:int)->list:
         cur= self.databaseHelper.con.cursor()
         cur.execute('''SELECT e.*,tp.TicketStatusId as ticketStatusId, ts.Name as ticketStatusName, 0 as canBuyTicket
-                    from Event e 
-                    INNER JOIN TicketPayment tp on tp.eventId = e.Id AND tp.userId = ?
+                    from TicketPayment tp 
+                    INNER JOIN Event e on tp.eventId = e.Id AND tp.userId = ?
                     INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
-                    WHERE e.id = ? AND tp.userId = ?''', [userId,id,userId])
+                    WHERE tp.userId = ?''', [userId,userId])
         values =cur.fetchall()
         cur.close()
-        return list(map(lambda x:EventDetailEntity.fromMap(x),values ))   
-       
+        return list(map(lambda x:EventDetailEntity.fromMap(x),values ))  
+     
+    def getAllTicketListWithEvent(self)->list:
+        cur= self.databaseHelper.con.cursor()
+        cur.execute('''SELECT e.*,tp.TicketStatusId as ticketStatusId, ts.Name as ticketStatusName, 0 as canBuyTicket
+                    from TicketPayment tp 
+                    INNER JOIN Event e on tp.eventId = e.Id
+                    INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
+                    ''',)
+        values =cur.fetchall()
+        cur.close()
+        return list(map(lambda x:EventDetailEntity.fromMap(x),values ))    
+          
     def approveEventTicket(self,id:int)->bool:
         ticketInfo = self.getTicketPayementInfo()
         cur= self.databaseHelper.con.cursor()
