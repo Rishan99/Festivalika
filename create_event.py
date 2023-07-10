@@ -154,5 +154,5 @@ def defineEntryBoxPlace(row:int,widget:Widget,col:int|None=0):
     widget.grid(row=row,column=col,sticky='nw',padx=25,ipady=8,)
     
 if(__name__=="__main__"):    
-    run(1)
+    run()
   
