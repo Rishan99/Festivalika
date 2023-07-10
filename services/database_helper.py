@@ -23,12 +23,12 @@ class DatabaseHelper:
             cur.executescript('''BEGIN TRANSACTION;
                         CREATE TABLE if not exists "TicketStatus" (
                         	"id"	INTEGER,
-                        	"name"	INTEGER,
+                        	"name"	Text Not NULL,
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "Gender" (
                         	"id"	INTEGER,
-                        	"name"	INTEGER,
+                        	"name"	Text Not NULL,
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "User" (
@@ -45,22 +45,22 @@ class DatabaseHelper:
                         	"id"	INTEGER,
                         	"title"	TEXT NOT NULL,
                         	"description"	TEXT,
-                        	"startDate"	Text,
-                        	"endDate"	Text,
-                        	"price"	REAL DEFAULT 0.0,
+                        	"startDate"	Text Not NULL,
+                        	"endDate"	Text Not NULL,
+                        	"price"	REAL Not NULL DEFAULT 0.0,
                         	"address"	TEXT NOT NULL,
-                        	"createdDate"	Text DEFAULT (datetime('now','localtime')),
+                        	"createdDate"	Text Not NULL DEFAULT (datetime('now','localtime')),
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );     
                         CREATE TABLE if not exists "Category" (
                         	"id"	INTEGER,
-                        	"name"	INTEGER,
+                        	"name"	Text Not NULL,
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "EventCategoryAssociation" (
                         	"id"	INTEGER,
-                        	"categoryId"	INTEGER,
-                        	"eventId"	INTEGER,
+                        	"categoryId"	INTEGER Not NULL,
+                        	"eventId"	INTEGER Not NULL,
                         	FOREIGN KEY("EventId") REFERENCES "Event"("id"),
                         	FOREIGN KEY("CategoryId") REFERENCES "Category"("id"),
                         	PRIMARY KEY("id" AUTOINCREMENT)
