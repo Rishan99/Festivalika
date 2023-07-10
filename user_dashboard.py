@@ -5,7 +5,7 @@ from tkinter import messagebox as mb
 from tkinter.ttk import Separator
 
 from entity.event.event_entity import EventEntity
-# from event_detail import runEventDetail
+from event_detail import runEventDetail
 from services.event_service import EventService
 from datetime import datetime
 from services.general_service import GeneralService
@@ -24,11 +24,11 @@ categoryVar=None
 
 
 def runUserDashboard():
-    global __root,dropdown_options,categoryVar
+    global __root,dropdown_options,categoryVar,__event_list_data_frame
     __root =Tk()
     categoryVar= StringVar(__root,value="Select a category")
-    __event_list_data_frame=Frame(__root,width=9999)
-    __root.title(str(UserProvider().user.isAdmin))
+    __event_list_data_frame=Frame(__root,)
+    # __root.title(str(UserProvider().user.isAdmin))
     dropdown_options=list(map(lambda x:x.name,general_service.getCategoryList()))
     __event_heading()
     __showDropDown()
@@ -50,14 +50,15 @@ def __event_heading():
     Label(__root,text="Events For You",font=font.Font(weight="bold",size=16)).pack()    
     
 def refresh_event_list():
+    global __event_list_data_frame
     childs = __event_list_data_frame.children.copy()
     for child in childs.values():
         child.destroy()
     __show_event_list()
 
 def __on_event_pressed(event_id:int):
-    # runEventDetail(event_id)
-    pass
+    runEventDetail(event_id)
+    # pass
 
 def __show_event_list():
     event_list=event_service.getFilteredEventList(datetime.now(),"",selectedCategory)
@@ -94,5 +95,5 @@ def __event_widget(master,event: EventEntity)->Widget:
     description_label.grid(row=3,column=0,sticky="w")
     return event_frame
     
-# if(__name__=="__main__"):
-#     runUserDashboard()   
+if(__name__=="__main__"):
+    runUserDashboard()   

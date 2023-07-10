@@ -73,8 +73,7 @@ class TicketPaymentService:
         cur.execute('SELECT id FROM TicketPayment WHERE userId = ? AND eventId=?',[userId,eventId])
         cur.connection.commit()
         value =cur.fetchone()
-        return (value != None)
-              
+        return (value != None)             
                       
    
  
