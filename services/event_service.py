@@ -39,7 +39,7 @@ class EventService:
         if(len(event.title.strip())==0 or len(event.address.strip())==0):
             raise Exception("Sorry, Title or Address cannot be empty")  
         cur= self.databaseHelper.con.cursor()
-        cur1=cur.execute('''UPDATE Event SET title = ? description = ? startDate = ? endDate = ? price = ? address = ? WHERE id = ?''',
+        cur1=cur.execute('''UPDATE Event SET title = ?, description = ?, startDate = ?, endDate = ?, price = ?, address = ? WHERE id = ?''',
                          [event.title,event.description,event.startDate,event.endDate,event.price,event.address,event.id])
         eventId = cur1.lastrowid
         cur.execute('DELETE FROM EventCategoryAssociation WHERE EventId = ?',[event.id])

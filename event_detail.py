@@ -23,7 +23,7 @@ _event_id__:int=None
 
 
 
-def runEventDetail(id:int):
+def run(id:int):
     global __root,_event_id__
     _event_id__=id
     __root=Toplevel()

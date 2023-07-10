@@ -7,7 +7,7 @@ from entity.user_entity import UserEntity
 from services.auth_service import AuthService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
-from user_dashboard import runUserDashboard
+from user_dashboard import run
 authService = AuthService()
 
 genderList:list=GeneralService().getGenderList()
@@ -59,7 +59,7 @@ def loginPage():
            user= authService.loginUser(emailAddress.get(),password.get())
            UserProvider().initialize_user(user)
            loginWindow.destroy()
-           runUserDashboard()
+           run()
         except BaseException as error:
             mb.showerror(message=str(error),title="Error")   
     

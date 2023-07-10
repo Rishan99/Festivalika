@@ -3,9 +3,8 @@ from tkinter import *
 from tkinter import font
 from tkinter import messagebox as mb
 from tkinter.ttk import Separator
-
 from entity.event.event_entity import EventEntity
-from event_detail import runEventDetail
+import event_detail as ed
 from services.event_service import EventService
 from datetime import datetime
 from services.general_service import GeneralService
@@ -23,7 +22,7 @@ selectedCategory=None
 categoryVar=None
 
 
-def runUserDashboard():
+def run():
     global __root,dropdown_options,categoryVar,__event_list_data_frame
     __root =Tk()
     categoryVar= StringVar(__root,value="Select a category")
@@ -44,12 +43,12 @@ def __showDropDown():
 def __onOptionSelect(value):
     global selectedCategory
     selectedCategory=(dropdown_options.index(value)) 
-    refresh_event_list()       
+    __refresh_event_list()       
     
 def __event_heading():
     Label(__root,text="Events For You",font=font.Font(weight="bold",size=16)).pack()    
     
-def refresh_event_list():
+def __refresh_event_list():
     global __event_list_data_frame
     childs = __event_list_data_frame.children.copy()
     for child in childs.values():
@@ -57,7 +56,7 @@ def refresh_event_list():
     __show_event_list()
 
 def __on_event_pressed(event_id:int):
-    runEventDetail(event_id)
+    ed.run(event_id)
     # pass
 
 def __show_event_list():
@@ -96,4 +95,4 @@ def __event_widget(master,event: EventEntity)->Widget:
     return event_frame
     
 if(__name__=="__main__"):
-    runUserDashboard()   
+    run()   

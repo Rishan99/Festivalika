@@ -49,7 +49,7 @@ class DatabaseHelper:
                         	"endDate"	Text,
                         	"price"	REAL DEFAULT 0.0,
                         	"address"	TEXT NOT NULL,
-                        	"createdDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
+                        	"createdDate"	Text DEFAULT (datetime('now','localtime')),
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );     
                         CREATE TABLE if not exists "Category" (
@@ -70,7 +70,7 @@ class DatabaseHelper:
                         	"ticketStatusId"	INTEGER NOT NULL,
                         	"eventId"	INTEGER NOT NULL,
                         	"userId"	INTEGER NOT NULL,
-                        	"createdDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
+                        	"createdDate"	Text DEFAULT (datetime('now','localtime')),
                         	FOREIGN KEY("EventId") REFERENCES "Event"("id"),
                         	FOREIGN KEY("UserId") REFERENCES "User"("id"),
                         	FOREIGN KEY("TicketStatusId") REFERENCES "TicketStatus"("id"),
