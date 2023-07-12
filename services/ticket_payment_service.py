@@ -4,7 +4,6 @@ from datetime import datetime
 from entity.event.event_detail_entity import EventDetailEntity
 from entity.ticket_payment_entity import TicketPaymentEntity
 from services.database_helper import DatabaseHelper
-
 from services.event_service import EventService
 
 
@@ -77,16 +76,15 @@ class TicketPaymentService:
     def getTicketPayementInfo(self,id:int):
         cur= self.databaseHelper.con.cursor()
         cur.execute('SELECT * FROM TicketPayment WHERE id = ?',[id])
-        cur.connection.commit()
         value =cur.fetchone()
         if(value == None):
             raise Exception("Payment information doesnot exists")
         return value
+  
         
     def __checkIfTicketPaymentExists(self,userId:int, eventId:int)->bool:
         cur= self.databaseHelper.con.cursor()
         cur.execute('SELECT id FROM TicketPayment WHERE userId = ? AND eventId=?',[userId,eventId])
-        cur.connection.commit()
         value =cur.fetchone()
         return (value != None)             
                       

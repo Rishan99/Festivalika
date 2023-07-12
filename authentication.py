@@ -163,5 +163,5 @@ def __registerPage():
   
 def defineEntryBoxPlace(row:int,widget:Widget):
     widget.grid(row=row,column=0,sticky='nw',padx=25,ipady=8,)
-__registerPage()
+# __registerPage()
   

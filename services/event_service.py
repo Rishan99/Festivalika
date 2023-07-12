@@ -1,18 +1,19 @@
 
 
 
-from  datetime import datetime
+from datetime import datetime
 from entity.category_entity import CategoryEntity
 from entity.event.event_detail_entity import EventDetailEntity
 from entity.event.event_entity import EventEntity
 from services.database_helper import DatabaseHelper
+
+# import services.ticket_payment_service as tp
 
 
 
 class EventService:
     def __init__(self):
         self.databaseHelper=DatabaseHelper()
-        
         
     def getCateoriesListByEventId(self, event_id:int):
         cur= self.databaseHelper.con.cursor()
@@ -73,10 +74,14 @@ class EventService:
             raise Exception ("Event Not Found")
         return EventDetailEntity.fromMap(value)   
     
-    
-    
-    def deleteEvent(self,id:int):
+    def deleteEvent(self,id:int):    
         cur= self.databaseHelper.con.cursor()
+        cur.execute('SELECT id FROM TicketPayment WHERE eventId=? LIMIT',[id])
+        value =cur.fetchone()
+        paymentExists= (value != None)  
+        if(paymentExists):
+            raise Exception("Cannot delete event, User has already applied for ticket for this event")
+        cur.execute('DELETE FROM EventCategoryAssociation WHERE EventId = ?',[id])
         cur.execute('''DELETE Event WHERE id = ?''', [id])
         cur.connection.commit()
     
@@ -87,13 +92,6 @@ class EventService:
         values =cur.fetchall()
         return list(map(lambda x:EventEntity.fromMap(x),values)) 
     
-    
-    # This retrieves event to display to user, only events that has not ended will be retrived
-    def getEventListForUser(self,currentDate)->list:
-        cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT * from Event where endDate>=?''',[str(currentDate)] )
-        values =cur.fetchall()
-        return list(map(lambda x:EventEntity.fromMap(x),values)) 
    
 #    [currentDate]=None for admin
     def getFilteredEventList(self,currentDate,query:str,categoryId:int):

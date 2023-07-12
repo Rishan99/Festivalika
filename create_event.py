@@ -29,7 +29,7 @@ def run(id:int|None=None):
     global __root
     __root = Tk()
     title_var=StringVar(__root)
-    price_var=StringVar(__root)
+    price_var=DoubleVar(__root)
     address_var=StringVar(__root)
     start_date_var=StringVar(__root)
     end_date_var=StringVar(__root)
