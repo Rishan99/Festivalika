@@ -62,6 +62,7 @@ def draw_side_bar():
             ul.run(tk=__body_frame)   
         case 4:
             import authentication as auth
+            __root.destroy()
             auth.loginPage()    
                                    
         
