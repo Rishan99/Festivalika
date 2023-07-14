@@ -4,7 +4,7 @@ from entity.event.event_entity import EventEntity
 class EventDetailEntity(EventEntity):
     def __init__(self,id, title, address, description, startDate, endDate, price, createdDate, canBuyTicket, ticketStatusId,categoryId,categoryName,ticketStatusName):
         super().__init__(id, title, address, description, startDate, endDate, price, createdDate,)
-        self.canBuyTicket = canBuyTicket ==1
+        self.canBuyTicket = canBuyTicket == 1
         self.ticketStatusId =ticketStatusId
         self.categoryId = categoryId
         self.categoryName =categoryName

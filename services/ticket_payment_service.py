@@ -2,8 +2,8 @@
 
 from datetime import datetime
 from entity.event.event_detail_entity import EventDetailEntity
+from entity.ticket_payment_entity import TicketPaymentEntity
 from services.database_helper import DatabaseHelper
-
 from services.event_service import EventService
 
 
@@ -22,48 +22,71 @@ class TicketPaymentService:
         cur.connection.commit()
         cur.close()
         
-    def getTicketListWithEvent(self,id:int,userId:int)->list:
+    def getUserTicketList(self,userId:int)->list:
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.*,tp.TicketStatusId as ticketStatusId, ts.Name as ticketStatusName, 0 as canBuyTicket
-                    from Event e 
-                    INNER JOIN TicketPayment tp on tp.eventId = e.Id AND tp.userId = ?
+        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name, tp.createdDate
+                    from TicketPayment tp 
+                    INNER JOIN Event e on tp.eventId = e.Id
                     INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
-                    WHERE e.id = ? AND tp.userId = ?''', [userId,id,userId])
+                    INNER JOIN User u on u.id = tp.userId
+                    WHERE tp.userId = ?''', [userId])
         values =cur.fetchall()
         cur.close()
-        return list(map(lambda x:EventDetailEntity.fromMap(x),values ))   
-       
+        return list(map(lambda x:TicketPaymentEntity.fromMap(x),values ))  
+     
+    def getAllTicketList(self)->list:
+        cur= self.databaseHelper.con.cursor()
+        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name as userName, tp.createdDate
+                    from TicketPayment tp 
+                    INNER JOIN Event e on tp.eventId = e.Id
+                    INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
+                    INNER JOIN User u on u.id = tp.userId
+                    ''',)
+        values =cur.fetchall()
+        cur.close()
+        return list(map(lambda x:TicketPaymentEntity.fromMap(x),values ))    
+          
     def approveEventTicket(self,id:int)->bool:
-        ticketInfo = self.getTicketPayementInfo()
+        ticketInfo = self.getTicketPayementInfo(id)
         cur= self.databaseHelper.con.cursor()
         cur.execute('''UPDATE TicketPayment SET ticketStatusId=2 WHERE id = ?''',[id])
         cur.connection.commit()
         cur.close()
+        return True
 
  
     def rejectEventTicket(self,id:int)->bool:
-        ticketInfo = self.getTicketPayementInfo()
+        ticketInfo = self.getTicketPayementInfo(id)
         cur= self.databaseHelper.con.cursor()
         cur.execute('''UPDATE TicketPayment SET ticketStatusId=3 WHERE id=?''',[id])
         cur.connection.commit()
         cur.close()
-
+        return True
+        
+    def deleteEventTicket(self,id:int)->bool:
+        ticketInfo = self.getTicketPayementInfo(id)
+        if(dict(ticketInfo).get('ticketStatusId')==2):
+            raise BaseException ("Approved Ticket cannot be deleted")
+        cur= self.databaseHelper.con.cursor()
+        cur.execute('''DELETE FROM TicketPayment WHERE id=?''',[id])
+        cur.connection.commit()
+        cur.close()
+        return True
         
     def getTicketPayementInfo(self,id:int):
         cur= self.databaseHelper.con.cursor()
         cur.execute('SELECT * FROM TicketPayment WHERE id = ?',[id])
-        cur.connection.commit()
         value =cur.fetchone()
         if(value == None):
             raise Exception("Payment information doesnot exists")
+        return value
+  
         
     def __checkIfTicketPaymentExists(self,userId:int, eventId:int)->bool:
         cur= self.databaseHelper.con.cursor()
         cur.execute('SELECT id FROM TicketPayment WHERE userId = ? AND eventId=?',[userId,eventId])
-        cur.connection.commit()
         value =cur.fetchone()
-        return (value != None)
-              
+        return (value != None)             
                       
    
  

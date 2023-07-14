@@ -1,10 +1,13 @@
 
 
 
-from  datetime import datetime
+from datetime import datetime
+from entity.category_entity import CategoryEntity
 from entity.event.event_detail_entity import EventDetailEntity
 from entity.event.event_entity import EventEntity
 from services.database_helper import DatabaseHelper
+
+# import services.ticket_payment_service as tp
 
 
 
@@ -12,6 +15,15 @@ class EventService:
     def __init__(self):
         self.databaseHelper=DatabaseHelper()
         
+    def getCateoriesListByEventId(self, event_id:int):
+        cur= self.databaseHelper.con.cursor()
+        cur.execute('''SELECT c.id as id,c.name as name from EventCategoryAssociation eca 
+                    INNER JOIN Category c on c.id = eca.categoryId
+                    WHERE eca.eventId = ?''', [event_id])
+        value =cur.fetchall()
+        cur.close()
+        return list(map(lambda x:CategoryEntity.fromMap(x),value))    
+             
     def getEventById(self,id:int):
         cur= self.databaseHelper.con.cursor()
         cur.execute('''SELECT * from Event WHERE id = ? LIMIT 1''', [id])
@@ -39,12 +51,11 @@ class EventService:
         if(len(event.title.strip())==0 or len(event.address.strip())==0):
             raise Exception("Sorry, Title or Address cannot be empty")  
         cur= self.databaseHelper.con.cursor()
-        cur1=cur.execute('''UPDATE Event SET title = ? description = ? startDate = ? endDate = ? price = ? address = ? WHERE id = ?''',
+        cur.execute('''UPDATE Event SET title = ?, description = ?, startDate = ?, endDate = ?, price = ?, address = ? WHERE id = ?''',
                          [event.title,event.description,event.startDate,event.endDate,event.price,event.address,event.id])
-        eventId = cur1.lastrowid
         cur.execute('DELETE FROM EventCategoryAssociation WHERE EventId = ?',[event.id])
         for categoryId in categoryIds:
-            cur.execute('''INSERT INTO EventCategoryAssociation (categoryId,eventId) VALUES (?,?)''',[categoryId,eventId])
+            cur.execute('''INSERT INTO EventCategoryAssociation (categoryId,eventId) VALUES (?,?)''',[categoryId,event.id])
         cur.connection.commit()
         cur.close()           
 
@@ -63,10 +74,14 @@ class EventService:
             raise Exception ("Event Not Found")
         return EventDetailEntity.fromMap(value)   
     
-    
-    
-    def deleteEvent(self,id:int):
+    def deleteEvent(self,id:int):    
         cur= self.databaseHelper.con.cursor()
+        cur.execute('SELECT id FROM TicketPayment WHERE eventId=? LIMIT',[id])
+        value =cur.fetchone()
+        paymentExists= (value != None)  
+        if(paymentExists):
+            raise Exception("Cannot delete event, User has already applied for ticket for this event")
+        cur.execute('DELETE FROM EventCategoryAssociation WHERE EventId = ?',[id])
         cur.execute('''DELETE Event WHERE id = ?''', [id])
         cur.connection.commit()
     
@@ -77,24 +92,20 @@ class EventService:
         values =cur.fetchall()
         return list(map(lambda x:EventEntity.fromMap(x),values)) 
     
-    
-    # This retrieves event to display to user, only events that has not ended will be retrived
-    def getEventListForUser(self,currentDate)->list:
-        cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT * from Event where endDate>=?''',[str(currentDate)] )
-        values =cur.fetchall()
-        return list(map(lambda x:EventEntity.fromMap(x),values)) 
    
 #    [currentDate]=None for admin
     def getFilteredEventList(self,currentDate,query:str,categoryId:int):
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.* from Event e INNER JOIN EventCategoryAssociation eca on eca.eventId = e.id WHERE '''
-                    +str("1" if currentDate is None else f'''endDate >='{str(currentDate)}' AND ''')
+        cur.execute('''SELECT e.* from Event e LEFT JOIN EventCategoryAssociation eca on eca.eventId = e.id WHERE '''
+                    +str("1" if currentDate is None else f'''e.endDate >='{str(currentDate)}' AND ''')
                     +str("1" if categoryId is None else f'''eca.categoryId = {categoryId}''')
-                    +str("" if len(query.strip())==0 else f''' AND e.address Like '%{query.strip()}%' ''',))
+                    +str("" if len(query.strip())==0 else f''' AND e.address Like '%{query.strip()}%' ''')
+                    +''' GROUP BY e.id''',)
         values =cur.fetchall()
         return list(map(lambda x:EventEntity.fromMap(x),values) )
-        
+    
+    
+#   validate if the [userId] can buy ticket of [eventId]        
     def allowToBuyTicket(self,userId:int,eventId:int)->bool:
         current_date=datetime.now()
         cur= self.databaseHelper.con.cursor()

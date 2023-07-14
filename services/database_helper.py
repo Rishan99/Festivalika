@@ -23,12 +23,12 @@ class DatabaseHelper:
             cur.executescript('''BEGIN TRANSACTION;
                         CREATE TABLE if not exists "TicketStatus" (
                         	"id"	INTEGER,
-                        	"name"	INTEGER,
+                        	"name"	Text Not NULL,
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "Gender" (
                         	"id"	INTEGER,
-                        	"name"	INTEGER,
+                        	"name"	Text Not NULL,
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "User" (
@@ -37,7 +37,6 @@ class DatabaseHelper:
                         	"username"	TEXT NOT NULL,
                             "password"	TEXT NOT NULL,
                         	"address"	TEXT,
-                        	"age"	INTEGER,
                             "isAdmin" INTEGER DEFAULT 0,
                         	"gender"	INTEGER NOT NULL REFERENCES "Gender"("id"),
                         	PRIMARY KEY("id" AUTOINCREMENT)
@@ -46,22 +45,22 @@ class DatabaseHelper:
                         	"id"	INTEGER,
                         	"title"	TEXT NOT NULL,
                         	"description"	TEXT,
-                        	"startDate"	Text,
-                        	"endDate"	Text,
-                        	"price"	REAL DEFAULT 0.0,
+                        	"startDate"	Text Not NULL,
+                        	"endDate"	Text Not NULL,
+                        	"price"	REAL Not NULL DEFAULT 0.0,
                         	"address"	TEXT NOT NULL,
-                        	"createdDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
+                        	"createdDate"	Text Not NULL DEFAULT (datetime('now','localtime')),
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );     
                         CREATE TABLE if not exists "Category" (
                         	"id"	INTEGER,
-                        	"name"	INTEGER,
+                        	"name"	Text Not NULL,
                         	PRIMARY KEY("id" AUTOINCREMENT)
                         );
                         CREATE TABLE if not exists "EventCategoryAssociation" (
                         	"id"	INTEGER,
-                        	"categoryId"	INTEGER,
-                        	"eventId"	INTEGER,
+                        	"categoryId"	INTEGER Not NULL,
+                        	"eventId"	INTEGER Not NULL,
                         	FOREIGN KEY("EventId") REFERENCES "Event"("id"),
                         	FOREIGN KEY("CategoryId") REFERENCES "Category"("id"),
                         	PRIMARY KEY("id" AUTOINCREMENT)
@@ -71,7 +70,7 @@ class DatabaseHelper:
                         	"ticketStatusId"	INTEGER NOT NULL,
                         	"eventId"	INTEGER NOT NULL,
                         	"userId"	INTEGER NOT NULL,
-                        	"createdDate"	INTEGER DEFAULT CURRENT_TIMESTAMP,
+                        	"createdDate"	Text DEFAULT (datetime('now','localtime')),
                         	FOREIGN KEY("EventId") REFERENCES "Event"("id"),
                         	FOREIGN KEY("UserId") REFERENCES "User"("id"),
                         	FOREIGN KEY("TicketStatusId") REFERENCES "TicketStatus"("id"),
@@ -80,7 +79,7 @@ class DatabaseHelper:
                         INSERT INTO Category (id,name) VALUES (1,"Music"),(2,"Movies"),(3,"Football"),(4,"Drama");
                         INSERT INTO TicketStatus (id,name) VALUES (1,"Pending"),(2,"Approved"),(3,"Rejected");
                         INSERT INTO Gender (id,name) VALUES (1,"Male"),(2,"Female"),(3,"Other");
-                        INSERT INTO User(name,username,password,address,age,isAdmin,gender) VALUES ("admin","admin","admin","",0,1,1);
+                        INSERT INTO User(name,username,password,address,isAdmin,gender) VALUES ("admin","admin","admin","",1,1);
                         COMMIT;
                         ''')   
         except:
