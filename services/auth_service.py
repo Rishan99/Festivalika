@@ -9,6 +9,7 @@ from services.ticket_payment_service import TicketPaymentService
 ticketPaymentService = TicketPaymentService()
 generalService = GeneralService()
 
+
 class AuthService:
     def __init__(self):
         self.databaseHelper=DatabaseHelper()
@@ -20,6 +21,7 @@ class AuthService:
        cur.close()
        print()
        return int(dict(value).get('count')) >0
+   
         
    
     def loginUser(self,username:str, password:str):
@@ -29,7 +31,7 @@ class AuthService:
             if(not self.__checkUsernameExists(username)):
                 raise Exception("Sorry, Username doesnot exists")  
             cur= self.databaseHelper.con.cursor()
-            cur.execute('''SELECT * from User WHERE username = ? AND password= ?  LIMIT 1''', [username,generalService.getHasedString(password)])
+            cur.execute('''SELECT * from User WHERE username = ? AND password= ?  LIMIT 1''', [username,generalService.getHashedString(password)])
             value =cur.fetchone()
             cur.close()
             if(value == None):
@@ -51,7 +53,7 @@ class AuthService:
         if(self.__checkUsernameExists(user.username)):
             raise Exception("Sorry, Username already exists")  
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''INSERT INTO User (name,username,address,gender,password) VALUES (?,?,?,?,?)''', [user.name,user.username,user.address,user.gender,generalService.getHasedString(user.password)])
+        cur.execute('''INSERT INTO User (name,username,address,gender,password) VALUES (?,?,?,?,?)''', [user.name,user.username,user.address,user.gender,generalService.getHashedString(user.password)])
         cur.connection.commit()
         cur.close()   
                    

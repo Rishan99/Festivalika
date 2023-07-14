@@ -8,7 +8,6 @@ import event_detail as ed
 from services.event_service import EventService
 from datetime import datetime
 from services.general_service import GeneralService
-from services.user_provider import UserProvider
 from widgets.scrollable import  ScrollbarFrame
 
 event_service = EventService()
@@ -22,9 +21,9 @@ selectedCategory=None
 categoryVar=None
 
 
-def run():
+def run(frame:Widget):
     global __root,dropdown_options,categoryVar,__event_list_data_frame
-    __root =Tk()
+    __root =frame
     categoryVar= StringVar(__root,value="Select a category")
     __event_list_data_frame=Frame(__root,)
     # __root.title(str(UserProvider().user.isAdmin))
@@ -94,5 +93,5 @@ def __event_widget(master,event: EventEntity)->Widget:
     description_label.grid(row=3,column=0,sticky="w")
     return event_frame
     
-if(__name__=="__main__"):
-    run()   
+# if(__name__=="__main__"):
+#     run()   

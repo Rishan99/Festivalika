@@ -7,8 +7,8 @@ from entity.user_entity import UserEntity
 from services.auth_service import AuthService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
-from user_dashboard import run
 from utility.helper import error_message_box
+import dashboard as dashboard
 authService = AuthService()
 
 genderList:list=GeneralService().getGenderList()
@@ -60,7 +60,7 @@ def loginPage():
            user= authService.loginUser(emailAddress.get(),password.get())
            UserProvider().initialize_user(user)
            loginWindow.destroy()
-           run()
+           dashboard.run()
         except BaseException as error:
             error_message_box(str(error))
     
@@ -163,5 +163,5 @@ def __registerPage():
   
 def defineEntryBoxPlace(row:int,widget:Widget):
     widget.grid(row=row,column=0,sticky='nw',padx=25,ipady=8,)
-# __registerPage()
+loginPage()
   

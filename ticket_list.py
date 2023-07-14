@@ -15,9 +15,9 @@ __root:Toplevel =None
 __ticket_payment_list_frame:Frame=None
 
 
-def run():
+def run(tk:Widget):
     global __root,dropdown_options,categoryVar,__ticket_payment_list_frame
-    __root =Tk()
+    __root =tk
     __ticket_payment_list_frame=Frame(__root,)
     __show_ticket_list()
     __ticket_payment_list_frame.pack(expand=1,fill='both')
@@ -34,7 +34,7 @@ def __refresh_ticket_list():
 def __show_ticket_list():
     ticket_list= ticket_payment_service.getAllTicketList() if UserProvider().user.isAdmin  else ticket_payment_service.getUserTicketList(UserProvider().user.id)
     if(len(ticket_list)==0):
-        Label(__ticket_payment_list_frame,text="No Tickets Pyament Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
+        Label(__ticket_payment_list_frame,text="No Tickets Payment Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
     else:    
         __scrollable_body = ScrollbarFrame(__ticket_payment_list_frame,)
         __scrollable_body.pack(fill='both',expand=1, anchor='e')

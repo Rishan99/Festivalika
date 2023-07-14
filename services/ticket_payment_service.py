@@ -32,7 +32,7 @@ class TicketPaymentService:
                     WHERE tp.userId = ?''', [userId])
         values =cur.fetchall()
         cur.close()
-        return list(map(lambda x:EventDetailEntity.fromMap(x),values ))  
+        return list(map(lambda x:TicketPaymentEntity.fromMap(x),values ))  
      
     def getAllTicketList(self)->list:
         cur= self.databaseHelper.con.cursor()

@@ -10,24 +10,25 @@ from utility.helper import convert_datetime_from_database, convert_datetime_to_d
 from services.event_service import EventService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
-from user_dashboard import run
+from event_list import run
 from tkcalendar import Calendar, DateEntry
 from utility.validator import float_validator, empty_validator
 eventService = EventService()
 categoryList:list=GeneralService().getCategoryList()
-
-__root:Toplevel=None
+# __root:Toplevel=None
 event_id:int|None=None
 
 
-def run(id:int|None=None): 
+
+def run(id:int|None=None,tk:Widget|None=None): 
+    
     """ 
     Pass [id] if you want to update event, else pass as None to create a new event
     """
     global event_id,categoryList
     event_id=id
     global __root
-    __root = Tk()
+    __root = tk if(tk is not None ) else Tk()
     title_var=StringVar(__root)
     price_var=DoubleVar(__root)
     address_var=StringVar(__root)
@@ -153,6 +154,6 @@ def placeTitle(master:Widget,title:str,row:int,col:int|None=0):
 def defineEntryBoxPlace(row:int,widget:Widget,col:int|None=0):
     widget.grid(row=row,column=col,sticky='nw',padx=25,ipady=8,)
     
-if(__name__=="__main__"):    
-    run()
+# if(__name__=="__main__"):    
+#     run()
   
