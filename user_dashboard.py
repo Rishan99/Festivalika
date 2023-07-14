@@ -27,7 +27,7 @@ categoryVar = StringVar(value="Select a category")
 
 
 def runUserDashboard():
-    global __root,dropdown_options,__event_list_data_frame
+    global __root,dropdown_options,__event_list_data_frame,main_dashboard_frame
     __root.title("Festivalika")
     __root.geometry("800x500")
 
@@ -38,52 +38,59 @@ def runUserDashboard():
     __root.rowconfigure(0,weight=1)
 
 
+
     
     # frame
-    frame3=LabelFrame(__root)
-    frame3.grid(row=0,column=2,sticky="news")
-    __event_list_data_frame=LabelFrame(__root,bg="#ffffff")
+    main_dashboard_frame=LabelFrame(__root)
+    main_dashboard_frame.grid(row=0,column=2,sticky="news")
+    __event_list_data_frame=LabelFrame(main_dashboard_frame,bg="#ffffff")
     __event_list_data_frame.grid(row=0,column=1,sticky="news")
-    frame1=LabelFrame(__root,bg="#091924")
-    frame1.grid(row=0,column=0,sticky="news")
+    app_drawer_frame=LabelFrame(__root,bg="#091924")
+    app_drawer_frame.grid(row=0,column=0,sticky="news")
 
-    # configuring frame1 using grid
-    frame1.columnconfigure(0,weight=1)
-    # frame1.columnconfigure(1,weight=1)
-    frame1.rowconfigure(0,weight=1)
-    frame1.rowconfigure(1,weight=1)
-    frame1.rowconfigure(2,weight=1)
-    frame1.rowconfigure(3,weight=1)
-    frame1.rowconfigure(4,weight=1)
-    frame1.rowconfigure(5,weight=1)
-    frame1.rowconfigure(6,weight=1)
-    frame1.rowconfigure(7,weight=1)
+    # configuring main_dashboard_frame
+    main_dashboard_frame.columnconfigure(0,weight=1)
+    main_dashboard_frame.columnconfigure(1,weight=1)
+    main_dashboard_frame.rowconfigure(0,weight=1)
 
-    # making labels for frame1
-    festi=Label(frame1,text="Festivalika",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
+    # configuring app_drawer_frame using grid
+    app_drawer_frame.columnconfigure(0,weight=1)
+    # app_drawer_frame.columnconfigure(1,weight=1)
+    app_drawer_frame.rowconfigure(0,weight=1)
+    app_drawer_frame.rowconfigure(1,weight=1)
+    app_drawer_frame.rowconfigure(2,weight=1)
+    app_drawer_frame.rowconfigure(3,weight=1)
+    app_drawer_frame.rowconfigure(4,weight=1)
+    app_drawer_frame.rowconfigure(5,weight=1)
+    app_drawer_frame.rowconfigure(6,weight=1)
+    app_drawer_frame.rowconfigure(7,weight=1)
+
+    # making labels for app_drawer_frame
+    festi=Label(app_drawer_frame,text="Festivalika",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
     festi.grid(row=1,column=0,sticky='w')
-    event=Label(frame1,text="Event",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
+    event=Button(app_drawer_frame,text="Event",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
     event.grid(row=3,column=0,sticky='w')
-    my_tick=Label(frame1,text="My Ticket",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
+    my_tick=Button(app_drawer_frame,text="My Ticket",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
     my_tick.grid(row=4,column=0,sticky='w')
-    account=Label(frame1,text="My Account",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
+    account=Button(app_drawer_frame,text="My Account",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
     account.grid(row=5,column=0,sticky='w')
-    l_out=Label(frame1,text="Log Out",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
+    l_out=Button(app_drawer_frame,text="Log Out",font=('Arial',10,'bold'),bg="#091924",fg="#f3f6f4")
     l_out.grid(row=7,column=0,sticky='ws')
 
-    # inserting picture in frame3
-    img=Image.open(Dashboard_Background1)
-    resize=img.resize((500,700),Image.LANCZOS)
-    nimg=ImageTk.PhotoImage(resize)
-    label=Label(frame3,image=nimg)
-    label.grid(row=1,column=1)
     dropdown_options=list(map(lambda x:x.name,general_service.getCategoryList()))
-    __event_heading()
-    __showDropDown()
-    __show_event_list()
+    # __event_heading()
+    # __showDropDown()
+    # __show_event_list()
     # __event_list_data_frame.pack(expand=1,fill='both')
     __root.mainloop()
 
+
+def image_insert():
+    img=Image.open(Dashboard_Background1)
+    resize=img.resize((400,600),Image.LANCZOS)
+    nimg=ImageTk.PhotoImage(resize)
+    label=Label(__root,image=nimg)
+    label.grid(row=0,column=0,columnspan=2)
 
 def __showDropDown():
     dropdown_menu = OptionMenu(__event_list_data_frame,categoryVar, *dropdown_options,command=lambda x:__onOptionSelect(x) ) 
@@ -129,13 +136,13 @@ def __event_widget(master,event: EventEntity)->Widget:
     title_label=Label(event_frame,text=event.title,font=('Arial',14),anchor="w")
     address_label=Label(event_frame,text=event.address,font=('Arial',10,))
     status_text=event.event_status_text()
-    frame1 = Frame(master=event_frame)       
-    status_label = Label(frame1,text=status_text,font=font.Font(weight="bold",size=10))
-    price_label=Label(frame1,text="Price: "+str(event.price),)
+    app_drawer_frame = Frame(master=event_frame)       
+    status_label = Label(app_drawer_frame,text=status_text,font=font.Font(weight="bold",size=10))
+    price_label=Label(app_drawer_frame,text="Price: "+str(event.price),)
     description_label =Label(master=event_frame,text=event.description)
     title_label.grid(row=0,column=0,sticky="w")
     address_label.grid(row=1,column=0,sticky="w")
-    frame1.grid(row=2,column=0,sticky="w")
+    app_drawer_frame.grid(row=2,column=0,sticky="w")
     status_label.pack(side=LEFT)
     price_label.pack(side=LEFT)
     description_label.grid(row=3,column=0,sticky="w")

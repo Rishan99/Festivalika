@@ -91,4 +91,5 @@ class DatabaseHelper:
         return os.path.isfile(self.databasePath)
             
     def __del__(self):
+        # pass
         self.con.close()
