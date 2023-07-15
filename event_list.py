@@ -75,7 +75,7 @@ def __show_event_list():
             separator.pack(fill='x',expand=1,pady=5,padx=10,)
             event_frame.pack(fill='x',expand=1,anchor='w')
     
-      
+    #   change layout here
 def __event_widget(master,event: EventEntity)->Widget:
     event_frame = Frame(master=master)
     title_label=Label(event_frame,text=event.title,font=('Arial',14),anchor="w")

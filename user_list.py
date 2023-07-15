@@ -41,14 +41,14 @@ def __show_user_list():
         user_list_frame=__scrollable_body.scrolled_frame
         for user in user_list:
             user_frame = Frame(user_list_frame)
-            widget=__ticket_widget(user_frame,user)
+            widget=__user_widget(user_frame,user)
             widget.pack(anchor="w",padx=10)
             separator = Separator(user_frame, orient='horizontal')
             separator.pack(fill='x',expand=1,pady=5,padx=10,)
             user_frame.pack(fill='x',expand=1,anchor='w')
     
-      
-def __ticket_widget(master,user: UserEntity)->Widget:
+#    change heree   
+def __user_widget(master,user: UserEntity)->Widget:
     user_frame = Frame(master=master)
     name_label=Label(user_frame,text=user.name,font=('Arial',14),anchor="w")
     username_label=Label(user_frame,text=user.username,font=('Arial',10,))

@@ -1,6 +1,5 @@
 
 
-import argon2
 from entity.category_entity import CategoryEntity
 from entity.gender_entity import GenderEntity
 from entity.user_entity import UserEntity
