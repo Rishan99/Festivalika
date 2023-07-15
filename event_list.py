@@ -31,12 +31,12 @@ def run(frame:Widget):
     __event_heading()
     __showDropDown()
     __show_event_list()
-    # __event_list_data_frame.pack(expand=1,fill='both')
+    __event_list_data_frame.pack(expand=1,fill='both')
     __root.mainloop()
 
 
 def __showDropDown():
-    dropdown_menu = OptionMenu(__event_list_data_frame,categoryVar, *dropdown_options,command=lambda x:__onOptionSelect(x) ) 
+    dropdown_menu = OptionMenu(__root,categoryVar, *dropdown_options,command=lambda x:__onOptionSelect(x) ) 
     dropdown_menu.pack()     
     
 def __onOptionSelect(value):
@@ -45,7 +45,7 @@ def __onOptionSelect(value):
     __refresh_event_list()       
     
 def __event_heading():
-    Label(__event_list_data_frame,text="Events For You",font=font.Font(weight="bold",size=16)).pack()    
+    Label(__root,text="Events For You",font=font.Font(weight="bold",size=16)).pack()    
     
 def __refresh_event_list():
     global __event_list_data_frame
@@ -75,7 +75,7 @@ def __show_event_list():
             separator.pack(fill='x',expand=1,pady=5,padx=10,)
             event_frame.pack(fill='x',expand=1,anchor='w')
     
-      
+    #   change layout here
 def __event_widget(master,event: EventEntity)->Widget:
     event_frame = Frame(master=master)
     title_label=Label(event_frame,text=event.title,font=('Arial',14),anchor="w")

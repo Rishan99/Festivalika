@@ -23,7 +23,7 @@ def run():
     global __root,__body_frame
     __root =Tk()
     app_drawer_frame=side_bar()
-    app_drawer_frame.pack(side=LEFT,anchor='ne')
+    app_drawer_frame.pack(side=LEFT,anchor='ne',fill='y')
     __body_frame=Frame(__root)
     __body_frame.pack(fill='both',side=RIGHT,expand=1)
     draw_side_bar()
@@ -31,15 +31,38 @@ def run():
     __root.mainloop()
 
 def side_bar()->Frame:
-    app_drawer_frame = Frame(__root)
+    app_drawer_frame = Frame(__root,bg="#091924",width=120)
+
+    # # configuring app_drawer_frame
+    # app_drawer_frame.columnconfigure(0,weight=1)
+    # app_drawer_frame.rowconfigure((tuple(range(20))),weight=1)
+
+
+    festi=Label(app_drawer_frame,text="Festivalika",font=('Arial',20,'bold'),fg="#6a3bff",bg="#091924",pady=30,padx=30)
+    festi.pack()
+
+    menu_option_frame=Frame(app_drawer_frame,bg="#091924",)
+
+
+    event=Label(menu_option_frame,text='Event List',fg="#ffffff",bg="#091924")
+    event.pack()
+
+    create_event=Label(menu_option_frame,text='Create Event',fg='#ffffff',bg="#091924",pady=10)
+    create_event.pack()
     
-    Button(app_drawer_frame,text='event list',command=lambda :updateIndex(0)).pack()
-    Button(app_drawer_frame,text='create event',command=lambda :updateIndex(1)).pack()
+    my_ticket=Label(menu_option_frame,text='My Ticket List',fg='#ffffff',bg="#091924",pady=10)
+    my_ticket.pack()
     
-    Button(app_drawer_frame,text='Ticket List',command=lambda :updateIndex(2)).pack()
-    
-    Button(app_drawer_frame,text='User List',command=lambda :updateIndex(3)).pack()
-    Button(app_drawer_frame,text='Log out',command=lambda :updateIndex(4)).pack()
+    user_list=Label(menu_option_frame,text='User List',fg='#ffffff',bg="#091924",pady=10)
+    user_list.pack()
+    Frame(menu_option_frame,bg="#091924").pack(expand=1,fill='y',anchor='s',)
+    log_out=Label(menu_option_frame,text='Log Out',fg='#ffffff',bg="#091924",pady=10)
+    log_out.pack()
+    childrens = menu_option_frame.winfo_children().copy()
+    for i in childrens:
+        i.bind('<Button-1>',lambda e,id=childrens.index(i): updateIndex(id))
+    menu_option_frame.pack(expand=1,fill=BOTH)
+
     return app_drawer_frame
     
 
@@ -60,7 +83,7 @@ def draw_side_bar():
         case 3:
             import user_list as ul
             ul.run(tk=__body_frame)   
-        case 4:
+        case 5:
             import authentication as auth
             __root.destroy()
             auth.loginPage()    
