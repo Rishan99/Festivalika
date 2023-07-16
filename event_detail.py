@@ -55,6 +55,8 @@ def __configureBody():
     event_frame.pack()   
 
 def __ticket_status_widget(master:Widget):
+    if(UserProvider().user.isAdmin):
+        return
     global __event,__ticket_button
     if(__event.canBuyTicket):
         __ticket_button =Button(master=master,text="Buy Ticket",command=__buy_ticket)
