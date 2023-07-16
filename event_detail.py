@@ -43,7 +43,7 @@ def __configureBody():
     status_text=__event.event_status_text()
     frame1 = Frame(master=event_frame)       
     status_label = Label(frame1,text=status_text,font=font.Font(weight="bold",size=10))
-    price_label=Label(frame1,text="Price: "+str(__event.price),)
+    price_label=Label(frame1,text="Price: "+str(__event.price),fg="#6a3bff")
     description_label =Label(master=event_frame,text=__event.description)
     title_label.pack()
     address_label.pack()
