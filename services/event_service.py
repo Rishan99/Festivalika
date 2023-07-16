@@ -96,9 +96,10 @@ class EventService:
 #    [currentDate]=None for admin
     def getFilteredEventList(self,currentDate,query:str,categoryId:int):
         cur= self.databaseHelper.con.cursor()
+        currentDate=list(str(currentDate).split(" "))[0]
         cur.execute('''SELECT e.* from Event e LEFT JOIN EventCategoryAssociation eca on eca.eventId = e.id WHERE '''
-                    +str(("1" if currentDate is None else f''' e.endDate >='{str(currentDate)}''''')+' AND ')
-                    +str("1" if categoryId is None else f''' eca.categoryId = {categoryId} ''')
+                    +str(("" if currentDate is None else f' e.endDate >={str(currentDate)}'))
+                    +str("" if categoryId is None else f''' AND eca.categoryId = {categoryId} ''')
                     +str("" if len(query.strip())==0 else f''' AND e.address Like '%{query.strip()}%' ''')
                     +''' GROUP BY e.id ORDER BY '''
                     +str(' e.endDate asc 'if currentDate is not None else ' e.id asc '))
