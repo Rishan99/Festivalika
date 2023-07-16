@@ -9,6 +9,7 @@ from services.event_service import EventService
 from datetime import datetime
 from services.general_service import GeneralService
 import event_list as ud
+from services.user_provider import UserProvider
 
 
 event_service = EventService()
@@ -45,22 +46,29 @@ def side_bar()->Frame:
 
 
     event=Label(menu_option_frame,text='Event List',fg="#ffffff",bg="#091924")
+    event.bind('<Button-1>',lambda e,id=0: updateIndex(id))
     event.pack()
-
-    create_event=Label(menu_option_frame,text='Create Event',fg='#ffffff',bg="#091924",pady=10)
-    create_event.pack()
+    if(UserProvider().user.isAdmin):
+        create_event=Label(menu_option_frame,text='Create Event',fg='#ffffff',bg="#091924",pady=10)
+        create_event.pack()
+        create_event.bind('<Button-1>',lambda e,id=1: updateIndex(id))
     
-    my_ticket=Label(menu_option_frame,text='My Ticket List',fg='#ffffff',bg="#091924",pady=10)
+    my_ticket=Label(menu_option_frame,text= 'My Ticket List' if (not UserProvider().user.isAdmin) else 'Ticket List',fg='#ffffff',bg="#091924",pady=10)
+    my_ticket.bind('<Button-1>',lambda e,id=2: updateIndex(id))
     my_ticket.pack()
     
-    user_list=Label(menu_option_frame,text='User List',fg='#ffffff',bg="#091924",pady=10)
-    user_list.pack()
+    if(UserProvider().user.isAdmin):
+        user_list=Label(menu_option_frame,text='User List',fg='#ffffff',bg="#091924",pady=10)
+        user_list.bind('<Button-1>',lambda e,id=3: updateIndex(id))
+        user_list.pack()
+
     Frame(menu_option_frame,bg="#091924").pack(expand=1,fill='y',anchor='s',)
     log_out=Label(menu_option_frame,text='Log Out',fg='#ffffff',bg="#091924",pady=10)
+    log_out.bind('<Button-1>',lambda e,id=5: updateIndex(id))
     log_out.pack()
-    childrens = menu_option_frame.winfo_children().copy()
-    for i in childrens:
-        i.bind('<Button-1>',lambda e,id=childrens.index(i): updateIndex(id))
+    # childrens = menu_option_frame.winfo_children().copy()
+    # for i in childrens:
+    #     i.bind('<Button-1>',lambda e,id=childrens.index(i): updateIndex(id))
     menu_option_frame.pack(expand=1,fill=BOTH)
 
     return app_drawer_frame
