@@ -8,11 +8,12 @@ import event_detail as ed
 from services.event_service import EventService
 from datetime import datetime
 from services.general_service import GeneralService
+from services.user_provider import UserProvider
 from widgets.scrollable import  ScrollbarFrame
 
 event_service = EventService()
 general_service = GeneralService()
-
+category_list=general_service.getCategoryList()
 __root:Toplevel =None
 __event_list_data_frame:Frame=None
 dropdown_options = [
@@ -24,10 +25,11 @@ categoryVar=None
 def run(frame:Widget):
     global __root,dropdown_options,categoryVar,__event_list_data_frame
     __root =frame
-    categoryVar= StringVar(__root,value="Select a category")
     __event_list_data_frame=Frame(__root,)
     # __root.title(str(UserProvider().user.isAdmin))
-    dropdown_options=list(map(lambda x:x.name,general_service.getCategoryList()))
+    dropdown_options=list(map(lambda x:x.name,category_list))
+    dropdown_options.insert(0,"All")
+    categoryVar= StringVar(__root,value=dropdown_options[0])
     __event_heading()
     __showDropDown()
     __show_event_list()
@@ -36,12 +38,19 @@ def run(frame:Widget):
 
 
 def __showDropDown():
-    dropdown_menu = OptionMenu(__root,categoryVar, *dropdown_options,command=lambda x:__onOptionSelect(x) ) 
+    dropdown_menu = OptionMenu(__root,categoryVar, *dropdown_options,command=__onOptionSelect ) 
     dropdown_menu.pack()     
     
 def __onOptionSelect(value):
     global selectedCategory
-    selectedCategory=(dropdown_options.index(value)) 
+    try:
+        index=(dropdown_options.index(value)) 
+        if(index==0):
+            selectedCategory=None
+        else:
+            selectedCategory= category_list[dropdown_options.index(value)-1].id     
+    except ValueError:
+        selectedCategory=None    
     __refresh_event_list()       
     
 def __event_heading():
@@ -59,7 +68,7 @@ def __on_event_pressed(event_id:int):
     # pass
 
 def __show_event_list():
-    event_list=event_service.getFilteredEventList(datetime.now(),"",selectedCategory)
+    event_list=event_service.getFilteredEventList(datetime.now() if  not UserProvider().user.isAdmin else None,"",selectedCategory)
     if(len(event_list)==0):
         Label(__event_list_data_frame,text="No Events Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
     else:    

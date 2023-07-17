@@ -50,7 +50,7 @@ def loginPage():
     emailAddress=Entry(loginFormFrame,font=('Arial',20),bg="#eeeeee",border=0)
     emailAddress.grid(row=3,column=0,sticky='n',columnspan=2)
     Label(loginFormFrame,text="Password",font=('Arial',10,'bold'),bg="#ffffff").grid(row=4,column=0,sticky='w')
-    password=Entry(loginFormFrame,font=('Arial',20),bg="#eeeeee",border=0)
+    password=Entry(loginFormFrame,font=('Arial',20),bg="#eeeeee",border=0,show="*")
     password.grid(row=5,column=0,sticky='n',columnspan=2)
     
     # Function to call when press [Login] button

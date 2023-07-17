@@ -1,8 +1,10 @@
 
+from functools import reduce
 from tkinter import *
 from tkinter import font
 from tkinter import messagebox as mb
 from tkinter.ttk import Separator
+from entity.ticket_count_entity import TickeCountEntity
 from entity.ticket_payment_entity import TicketPaymentEntity
 from services.ticket_payment_service import TicketPaymentService
 from services.user_provider import UserProvider
@@ -30,9 +32,26 @@ def __refresh_ticket_list():
     for child in childs.values():
         child.destroy()
     __show_ticket_list()
+    
+    
+def countTotalTicketByStatus(initial:TickeCountEntity,data:TicketPaymentEntity)->TickeCountEntity:
+    match data.ticketStatusId:
+        case 1:
+            initial.pendingCount+=1
+        case 2:
+            initial.approvedCount+=1
+        case 3:
+            initial.RejectedCount+=1
+    return initial
+        
 
 def __show_ticket_list():
     ticket_list= ticket_payment_service.getAllTicketList() if UserProvider().user.isAdmin  else ticket_payment_service.getUserTicketList(UserProvider().user.id)
+    count_data=reduce(countTotalTicketByStatus,ticket_list,TickeCountEntity(0,0,0))
+    Label(__ticket_payment_list_frame,text=f"Total Ticket: {len(ticket_list)}",).pack(fill=Y,expand=1,padx=20)
+    Label(__ticket_payment_list_frame,text=f"Total Approved Ticket: {count_data.approvedCount}",).pack(fill=Y,expand=1,padx=20)
+    Label(__ticket_payment_list_frame,text=f"Total Pending Ticket: {count_data.pendingCount}",).pack(fill=Y,expand=1,padx=20)
+    Label(__ticket_payment_list_frame,text=f"Total Rejected Ticket: {count_data.RejectedCount}",).pack(fill=Y,expand=1,padx=20)
     if(len(ticket_list)==0):
         Label(__ticket_payment_list_frame,text="No Tickets Payment Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
     else:    

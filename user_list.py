@@ -33,6 +33,7 @@ def __refresh_user_list():
 
 def __show_user_list():
     user_list= user_service.getUserList()
+    Label(__root,text=f'Total Users: {len(user_list)}').pack()
     if(len(user_list)==0):
         Label(__user_list_frame,text="No User Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
     else:    

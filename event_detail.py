@@ -43,7 +43,7 @@ def __configureBody():
     status_text=__event.event_status_text()
     frame1 = Frame(master=event_frame)       
     status_label = Label(frame1,text=status_text,font=font.Font(weight="bold",size=10))
-    price_label=Label(frame1,text="Price: "+str(__event.price),)
+    price_label=Label(frame1,text="Price: "+str(__event.price),fg="#6a3bff")
     description_label =Label(master=event_frame,text=__event.description)
     title_label.pack()
     address_label.pack()
@@ -55,6 +55,8 @@ def __configureBody():
     event_frame.pack()   
 
 def __ticket_status_widget(master:Widget):
+    if(UserProvider().user.isAdmin):
+        return
     global __event,__ticket_button
     if(__event.canBuyTicket):
         __ticket_button =Button(master=master,text="Buy Ticket",command=__buy_ticket)
