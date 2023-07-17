@@ -96,5 +96,3 @@ def reject_ticket(ticket_id:int):
         except BaseException as ex:
             error_message_box(title="Error",message=str(ex))    
     
-if(__name__=="__main__"):
-    run()   

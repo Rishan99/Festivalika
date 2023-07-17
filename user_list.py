@@ -70,5 +70,3 @@ def __user_widget(master,user: UserEntity)->Widget:
 #             error_message_box(title="Error",message=str(ex)) 
 
     
-if(__name__=="__main__"):
-    run()   

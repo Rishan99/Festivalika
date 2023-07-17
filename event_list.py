@@ -93,5 +93,3 @@ def __event_widget(master,event: EventEntity)->Widget:
     description_label.grid(row=3,column=0,sticky="w")
     return event_frame
     
-# if(__name__=="__main__"):
-#     run()   
