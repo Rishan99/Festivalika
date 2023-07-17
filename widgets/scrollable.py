@@ -22,7 +22,7 @@ class ScrollbarFrame(tk.Frame):
 
         # The Frame to be scrolled, layout into the canvas
         # All widgets to be scrolled have to use this Frame as parent
-        self.scrolled_frame = tk.Frame(self.canvas, background=self.canvas.cget('bg'))
+        self.scrolled_frame = tk.Frame(self.canvas, background=self.canvas.cget('bg'),bg="#FFFFFF")
         self.canvas.create_window((0, 0), window=self.scrolled_frame, anchor="nw",width=9999)
 
         # Configures the scrollregion of the Canvas dynamically

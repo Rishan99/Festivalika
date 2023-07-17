@@ -10,17 +10,18 @@ from services.ticket_payment_service import TicketPaymentService
 from services.user_provider import UserProvider
 from utility.helper import error_message_box
 from widgets.scrollable import  ScrollbarFrame
+from utility.assets import *
 
 ticket_payment_service = TicketPaymentService()
 
-__root:Toplevel =None
+__root:Widget =None
 __ticket_payment_list_frame:Frame=None
 
 
 def run(tk:Widget):
     global __root,dropdown_options,categoryVar,__ticket_payment_list_frame
     __root =tk
-    __ticket_payment_list_frame=Frame(__root,)
+    __ticket_payment_list_frame=Frame(__root,bg="#FFFFFF")
     __show_ticket_list()
     __ticket_payment_list_frame.pack(expand=1,fill='both')
     __root.mainloop()
@@ -48,43 +49,42 @@ def countTotalTicketByStatus(initial:TickeCountEntity,data:TicketPaymentEntity)-
 def __show_ticket_list():
     ticket_list= ticket_payment_service.getAllTicketList() if UserProvider().user.isAdmin  else ticket_payment_service.getUserTicketList(UserProvider().user.id)
     count_data=reduce(countTotalTicketByStatus,ticket_list,TickeCountEntity(0,0,0))
-    Label(__ticket_payment_list_frame,text=f"Total Ticket: {len(ticket_list)}",).pack(fill=Y,expand=1,padx=20)
-    Label(__ticket_payment_list_frame,text=f"Total Approved Ticket: {count_data.approvedCount}",).pack(fill=Y,expand=1,padx=20)
-    Label(__ticket_payment_list_frame,text=f"Total Pending Ticket: {count_data.pendingCount}",).pack(fill=Y,expand=1,padx=20)
-    Label(__ticket_payment_list_frame,text=f"Total Rejected Ticket: {count_data.RejectedCount}",).pack(fill=Y,expand=1,padx=20)
+    Label(__ticket_payment_list_frame,text=f"{'Take a look at all your tickets' if not UserProvider().user.isAdmin else 'Here are list of all the tickets'} ({len(ticket_list)})",font=font.Font(size=13,weight="bold"),bg="#FFFFFF").pack(padx=10,anchor='w')
+    Label(__ticket_payment_list_frame,text=f"Approved: {count_data.approvedCount}, Pending: {count_data.pendingCount}, Rejected : {count_data.RejectedCount}",bg="#FFFFFF",).pack(padx=10,anchor='w')
     if(len(ticket_list)==0):
-        Label(__ticket_payment_list_frame,text="No Tickets Payment Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
+        Label(__ticket_payment_list_frame,text="No Tickets Payment Found",font=font.Font(weight="normal",size=14,),bg="#FFFFFF").pack(fill=BOTH,expand=1,padx=20,pady=20)
     else:    
         __scrollable_body = ScrollbarFrame(__ticket_payment_list_frame,)
-        __scrollable_body.pack(fill='both',expand=1, anchor='e')
+        __scrollable_body.pack(fill='both',expand=1, anchor='e',pady=20)
         ticket_list_frame=__scrollable_body.scrolled_frame
         for ticket_payment in ticket_list:
-            ticket_payment_frame = Frame(ticket_list_frame)
+            ticket_payment_frame = Frame(ticket_list_frame,bg="#FFFFFF",width=300)
             widget=__ticket_widget(ticket_payment_frame,ticket_payment)
-            widget.pack(anchor="w",padx=10)
-            separator = Separator(ticket_payment_frame, orient='horizontal')
-            separator.pack(fill='x',expand=1,pady=5,padx=10,)
+            widget.pack(anchor="w",padx=10,fill=X)
             ticket_payment_frame.pack(fill='x',expand=1,anchor='w')
     
       
 def __ticket_widget(master,ticket_payment: TicketPaymentEntity)->Widget:
-    ticket_payment_frame = Frame(master=master)
-    title_label=Label(ticket_payment_frame,text=ticket_payment.eventTitle,font=('Arial',14),anchor="w")
-    ticket_status_label=Label(ticket_payment_frame,text=ticket_payment.ticketStatus,font=('Arial',10,))
-    user_name_label=Label(ticket_payment_frame,text=ticket_payment.userName,font=('Arial',10,))
-    title_label.grid(row=0,column=0,sticky="w")
-    ticket_status_label.grid(row=1,column=0,sticky="w")
-    user_name_label.grid(row=2,column=0,sticky="w")
-    approve_button=Button(ticket_payment_frame,text="Approve",command=lambda i=ticket_payment.id:approve_ticket(i))
-    reject_button=Button(ticket_payment_frame,text="Reject",command=lambda i=ticket_payment.id:reject_ticket(i))
-    delete_button=Button(ticket_payment_frame,text="Delete",command=lambda i=ticket_payment.id:delete_ticket(i))
-    if(UserProvider().user.isAdmin):
+    statusColor= pendingColor  if ticket_payment.ticketStatusId==2 else approvedColor if ticket_payment.ticketStatusId==1 else rejectedColor
+    ticket_payment_frame = Frame(master=master,pady=15,bg=backgroundTileColor,padx=15)
+    Label(ticket_payment_frame,text=ticket_payment.eventTitle,font=('Arial',12),anchor="w",bg=backgroundTileColor).grid(row=0,column=0,sticky="w")
+    Label(ticket_payment_frame,text=f'Venue: {ticket_payment.address}',anchor="w",bg=backgroundTileColor).grid(row=1,column=0,sticky="w")
+    Label(ticket_payment_frame,text=f'Bought By: {ticket_payment.userName}',bg=backgroundTileColor).grid(row=2,column=0,sticky="w")
+    Label(ticket_payment_frame,text=f'Status: {ticket_payment.ticketStatus}',fg=statusColor,bg=backgroundTileColor).grid(row=3,column=0,sticky="w")
+    Label(ticket_payment_frame,text=f'Price: {ticket_payment.price}',bg=backgroundTileColor,).grid(row=4,column=0,sticky="w")
+    button_frame = Frame(ticket_payment_frame)
+    button_frame.grid(row=5,column=0)
+    approve_button=Button(button_frame,text="Approve",bg=backgroundTileColor,command=lambda i=ticket_payment.id:approve_ticket(i))
+    reject_button=Button(button_frame,text="Reject",bg=backgroundTileColor,command=lambda i=ticket_payment.id:reject_ticket(i))
+    delete_button=Button(button_frame,text="Delete",bg=backgroundTileColor,command=lambda i=ticket_payment.id:delete_ticket(i))
+
+    if(not UserProvider().user.isAdmin):
         if(ticket_payment.ticketStatusId == 1):
-            approve_button.grid(row=3,column=0)
-            reject_button.grid(row=3,column=1)
-            delete_button.grid(row=3,column=2)
+            approve_button.pack(side=LEFT)
+            reject_button.pack(side=LEFT)
+            delete_button.pack(side=LEFT)
         elif(ticket_payment.ticketStatusId==3):
-            delete_button.grid(row=3,column=0)
+            delete_button.pack(side=LEFT)
     return ticket_payment_frame
 
 def approve_ticket(ticket_id:int):
@@ -114,4 +114,8 @@ def reject_ticket(ticket_id:int):
             __refresh_ticket_list()
         except BaseException as ex:
             error_message_box(title="Error",message=str(ex))    
-    
+
+
+abc = Tk()    
+abc.configure(bg="#ffffff")
+run(tk=abc)    

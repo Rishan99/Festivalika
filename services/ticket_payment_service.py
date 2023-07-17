@@ -24,7 +24,7 @@ class TicketPaymentService:
         
     def getUserTicketList(self,userId:int)->list:
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name, tp.createdDate
+        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name as userName, tp.createdDate,e.price,e.address
                     from TicketPayment tp 
                     INNER JOIN Event e on tp.eventId = e.Id
                     INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
@@ -36,7 +36,7 @@ class TicketPaymentService:
      
     def getAllTicketList(self)->list:
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name as userName, tp.createdDate
+        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name as userName, tp.createdDate,e.price,e.address
                     from TicketPayment tp 
                     INNER JOIN Event e on tp.eventId = e.Id
                     INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
