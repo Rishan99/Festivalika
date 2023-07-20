@@ -54,7 +54,7 @@ def __onOptionSelect(value):
     __refresh_event_list()       
     
 def __event_heading():
-    Label(__root,text="Events For You",font=font.Font(weight="bold",size=16)).pack()    
+    Label(__root,text="Events For You",font=font.Font(weight="bold",size=16),bg="#ffffff").pack()    
     
 def __refresh_event_list():
     global __event_list_data_frame
@@ -87,18 +87,18 @@ def __show_event_list():
     #   change layout here
 def __event_widget(master,event: EventEntity)->Widget:
     event_frame = Frame(master=master)
-    title_label=Label(event_frame,text=event.title,font=('Arial',14),anchor="w")
-    address_label=Label(event_frame,text=event.address,font=('Arial',10,))
+    title_label=Label(event_frame,text=event.title,font=('Poppins',14,'bold'),anchor="w")
+    address_label=Label(event_frame,text="Venue: "+event.address,font=('Poppins',10,'bold'))
     status_text=event.event_status_text()
     frame1 = Frame(master=event_frame)       
-    status_label = Label(frame1,text=status_text,font=font.Font(weight="bold",size=10))
-    price_label=Label(frame1,text="Price: "+str(event.price),)
+    status_label = Label(frame1,text=status_text,font=('Poppins',12,'bold'))
+    price_label=Label(frame1,text="Price: "+str(event.price),fg='red')
     description_label =Label(master=event_frame,text=event.description)
     title_label.grid(row=0,column=0,sticky="w")
     address_label.grid(row=1,column=0,sticky="w")
     frame1.grid(row=2,column=0,sticky="w")
-    status_label.pack(side=LEFT)
-    price_label.pack(side=LEFT)
+    status_label.grid(row=0,column=0,sticky="w")
+    price_label.grid(row=2,column=1,sticky="w")
     description_label.grid(row=3,column=0,sticky="w")
     return event_frame
     
