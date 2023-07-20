@@ -19,6 +19,7 @@ def __configureTopWindow()->Tk:
     root.iconbitmap(App_Icon)
     root.title(App_Name)
     root.config(bg=backgroundColor)
+    root.resizable(0,0)
     return root
 
 def loginPage(): 
@@ -80,7 +81,7 @@ def __registerPage():
     registerWindow.columnconfigure(0,weight=1)
     registerWindow.rowconfigure(0,weight=1)
     # for image
-    bckImage=ImageTk.PhotoImage(Image.open(Register_Background).resize((1300,750),Image.LANCZOS))
+    bckImage=ImageTk.PhotoImage(Image.open(Register_Background).resize((registerWindow.winfo_screenheight(),registerWindow.winfo_screenwidth()),Image.LANCZOS))
     background_label = Label(registerWindow,image=bckImage)
     background_label.grid(row=0,column=0)
     
