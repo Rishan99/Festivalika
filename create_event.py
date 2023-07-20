@@ -113,7 +113,8 @@ def run(id:int|None=None,tk:Widget|None=None):
         start_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.startDate))) 
         end_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
         
-    __root.mainloop()
+    if(tk is not None):
+        __root.mainloop()
 
     
 def __create_or_update_event(title:str,address:str,price:str,description:str,start_date:str,end_date:str,category_list:list):

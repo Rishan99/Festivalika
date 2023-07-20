@@ -17,8 +17,8 @@ def __configureTopWindow()->Tk:
     root=Tk()
     root.geometry("800x500")
     root.iconbitmap(App_Icon)
-    root.title("Festivalika")
-    root.config(bg="#ffffff")
+    root.title(App_Name)
+    root.config(bg=backgroundColor)
     return root
 
 def loginPage(): 
@@ -28,7 +28,7 @@ def loginPage():
         __registerPage()
            
     # loginFormFrame
-    loginFormFrame=LabelFrame(loginWindow,bg="#ffffff",padx=30,border=0)
+    loginFormFrame=LabelFrame(loginWindow,bg=backgroundColor,padx=30,border=0)
     loginFormFrame.pack(side="right",expand=True,fill=BOTH,pady=100)
     imageFrame=LabelFrame(loginWindow,border=0)
     imageFrame.pack(side="left",expand=True,fill=BOTH)
@@ -42,15 +42,15 @@ def loginPage():
     loginFormFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
     # title
-    Label(loginFormFrame,text="Welcome to",font=('Helvetica',14,'bold'),bg="#ffffff").grid(row=0,column=0,sticky='ws')
-    Label(loginFormFrame,text="Festivila",font=('Helvetica',30,"bold"),fg="#6a3bff",bg="#ffffff").grid(row=1,column=0,sticky='wn')
+    Label(loginFormFrame,text="Welcome to",font=('Helvetica',14,'bold'),bg=backgroundColor).grid(row=0,column=0,sticky='ws')
+    Label(loginFormFrame,text=App_Name,font=('Helvetica',30,"bold"),fg=primaryColor,bg=backgroundColor).grid(row=1,column=0,sticky='wn')
 
     # Form
-    Label(loginFormFrame,text="Email",font=('Arial',10,'bold'),bg="#ffffff").grid(row=2,column=0,sticky='w')
-    emailAddress=Entry(loginFormFrame,font=('Arial',20),bg="#eeeeee",border=0)
+    Label(loginFormFrame,text="Email",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=2,column=0,sticky='w')
+    emailAddress=Entry(loginFormFrame,font=('Arial',20),bg=inputFieldFillColor,border=0)
     emailAddress.grid(row=3,column=0,sticky='n',columnspan=2)
-    Label(loginFormFrame,text="Password",font=('Arial',10,'bold'),bg="#ffffff").grid(row=4,column=0,sticky='w')
-    password=Entry(loginFormFrame,font=('Arial',20),bg="#eeeeee",border=0,show="*")
+    Label(loginFormFrame,text="Password",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=4,column=0,sticky='w')
+    password=Entry(loginFormFrame,font=('Arial',20),bg=inputFieldFillColor,border=0,show="*")
     password.grid(row=5,column=0,sticky='n',columnspan=2)
     
     # Function to call when press [Login] button
@@ -64,10 +64,10 @@ def loginPage():
         except BaseException as error:
             error_message_box(str(error))
     
-    loginButton=Button(loginFormFrame,text="Login",fg="white",bg="#6a3bff",command=onLogin)
+    loginButton=Button(loginFormFrame,text="Login",fg="white",bg=primaryColor,command=onLogin)
     loginButton.grid(row=6,column=0,columnspan=2,sticky="nwe",ipady=8)
-    Label(loginFormFrame,text="Don't have an account?",font=('Arial',8,'bold'),bg="#ffffff").grid(row=7,column=0,sticky="ne")
-    Button(loginFormFrame,text="Register",bg="#ffffff",font=('Arial',8,'bold'),fg="#6a3bff",border=0,command=onRegisterPressed).grid(row=7,column=1,sticky="nw")
+    Label(loginFormFrame,text="Don't have an account?",font=('Arial',8,'bold'),bg=backgroundColor).grid(row=7,column=0,sticky="ne")
+    Button(loginFormFrame,text="Register",bg=backgroundColor,font=('Arial',8,'bold'),fg=primaryColor,border=0,command=onRegisterPressed).grid(row=7,column=1,sticky="nw")
     loginWindow.mainloop()
     
     
@@ -87,7 +87,7 @@ def __registerPage():
     
 
     # for frame
-    registerFrame=LabelFrame(registerWindow,bg="#d8d8d8",border=0)
+    registerFrame=LabelFrame(registerWindow,bg=backgroundColor,border=0,padx=25)
     registerFrame.grid(row=0,column=0,ipady=90)
 
     # Configure frame
@@ -101,46 +101,49 @@ def __registerPage():
             genderId=gender.id
 
     # widgets inside frame
-    Label(registerFrame,text="Sign up",font=('Arial',"18","bold"),bg='#d8d8d8',fg="#6a3bff").grid(row=0,column=0,sticky='sw',padx=25,ipady=7)
+    Label(registerFrame,text="Sign up",font=('Arial',"18","bold"),bg=backgroundColor,fg=primaryColor).grid(row=0,column=0,sticky='sw',ipady=7)
     row =1
     # 
-    Label(registerFrame,text="Name",font=('Arial',10,'bold'),bg='#d8d8d8').grid(row=row,column=0,sticky='sw',padx=25)
+    Label(registerFrame,text="Name",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=row,column=0,sticky='sw')
     row+=1
-    nameEntry=Entry(registerFrame,width=50,border=0)
+    nameEntry=Entry(registerFrame,width=50,border=0,bg=inputFieldFillColor,)
     defineEntryBoxPlace(row,nameEntry)
     row+=1
     # 
-    Label(registerFrame,text="Address",font=('Arial',10,'bold'),bg='#d8d8d8').grid(row=row,column=0,sticky='sw',padx=25)
-    addressEntry=Entry(registerFrame,width=50,border=0)
+    Label(registerFrame,text="Address",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=row,column=0,sticky='sw')
+    addressEntry=Entry(registerFrame,width=50,border=0,bg=inputFieldFillColor)
     row+=1
     defineEntryBoxPlace(row,addressEntry)
     row+=1
     #  
-    Label(registerFrame,text="Username",font=('Arial',10,'bold'),bg='#d8d8d8').grid(row=row,column=0,sticky='sw',padx=25)
+    Label(registerFrame,text="Username",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=row,column=0,sticky='sw')
     row+=1
-    emailAddressEntry=Entry(registerFrame,width=50,border=0)
+    emailAddressEntry=Entry(registerFrame,width=50,border=0,bg=inputFieldFillColor)
     defineEntryBoxPlace(row,emailAddressEntry)
     row+=1
     #  
-    Label(registerFrame,text="Gender",font=('Arial',10,'bold'),bg='#d8d8d8',).grid(row=row,column=0,sticky='sw',padx=25) 
+    Label(registerFrame,text="Gender",font=('Arial',10,'bold'),bg=backgroundColor,).grid(row=row,column=0,sticky='sw') 
     row+=1
     dropdown_menu = OptionMenu(registerFrame,genderVar, *list(map(lambda x:x.name,GeneralService().getGenderList())),command=lambda x:onGenderSelect(x) ) 
     defineEntryBoxPlace(row,dropdown_menu)
     row+=1
     # 
-    Label(registerFrame,text="Password",font=('Arial',10,'bold'),bg='#d8d8d8').grid(row=row,column=0,sticky='sw',padx=25)
-    passwordEntry=Entry(registerFrame,width=50,border=0)
+    Label(registerFrame,text="Password",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=row,column=0,sticky='sw')
+    passwordEntry=Entry(registerFrame,width=50,border=0,bg=inputFieldFillColor)
     row+=1
     defineEntryBoxPlace(row,passwordEntry)
     row+=1
     
     # 
-    Label(registerFrame,text="Confirm Password",font=('Arial',10,'bold'),bg='#d8d8d8').grid(row=row,column=0,sticky='sw',padx=25)
-    confirmPasswordEntry=Entry(registerFrame,width=50,border=0)
+    Label(registerFrame,text="Confirm Password",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=row,column=0,sticky='sw')
+    confirmPasswordEntry=Entry(registerFrame,width=50,border=0,bg=inputFieldFillColor)
     row+=1
     
     defineEntryBoxPlace(row,confirmPasswordEntry)
     row+=1
+    def onRegisterPressed():
+        registerWindow.destroy()
+        loginPage()
         # Function to call when press [Login] button
     def onRegister():
         try:
@@ -156,12 +159,17 @@ def __registerPage():
         #     runUserDashboard()
         except BaseException as error:
             error_message_box(str(error))  
-    registerButton=Button(registerFrame,text="Sign up",font=("arial",10,"bold"),bg="#6a3bff",fg="white",command=onRegister)
-    registerButton.grid(row=row,column=0,sticky='wen',padx=25,pady=25,ipady=12)
-    
+    registerButton=Button(registerFrame,text="Sign up",font=("arial",10,"bold"),bg=primaryColor,fg="white",command=onRegister)
+    registerButton.grid(row=row,column=0,sticky='wen',pady=25,ipady=8)
+    row+=1
+    login_text_frame = Frame(registerFrame,bg=backgroundColor)
+    login_text_frame.grid(row=row,column=0,sticky='ne')
+    Label(login_text_frame,text="Already have an account?",font=('Arial',8,'bold'),bg=backgroundColor).pack(side=LEFT,)
+    Button(login_text_frame,text="Login",bg=backgroundColor,font=('Arial',8,'bold'),fg=primaryColor,border=0,command=onRegisterPressed).pack(side=RIGHT)
+    Frame(registerFrame,bg=backgroundColor,pady=20).grid(row=row+1,column=0)
     registerWindow.mainloop()
   
 def defineEntryBoxPlace(row:int,widget:Widget):
-    widget.grid(row=row,column=0,sticky='nw',padx=25,ipady=8,)
-# loginPage()
+    widget.grid(row=row,column=0,sticky='nw',ipady=8,)
+__registerPage()
   

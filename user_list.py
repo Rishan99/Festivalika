@@ -21,7 +21,7 @@ def run(tk:Widget):
     __user_list_frame=Frame(__root,)
     __show_user_list()
     __user_list_frame.pack(expand=1,fill='both')
-    __root.mainloop()
+    # __root.mainloop()
   
 
 def __refresh_user_list():

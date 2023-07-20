@@ -31,7 +31,7 @@ def run(id:int):
     __event_id=id
     __root=Toplevel()
     __configureBody()
-    __root.mainloop()
+    # __root.mainloop()
     
 def __configureBody():
     global __event,__event_id
