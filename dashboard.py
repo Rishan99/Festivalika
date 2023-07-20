@@ -1,5 +1,6 @@
 
 from tkinter import *
+from PIL import ImageTk,Image
 from tkinter import font
 from tkinter import messagebox as mb
 from tkinter.ttk import Separator
@@ -10,26 +11,46 @@ from datetime import datetime
 from services.general_service import GeneralService
 import event_list as ud
 from services.user_provider import UserProvider
+from utility.assets import *
 
 
 event_service = EventService()
 general_service = GeneralService()
 
-__root:Toplevel =None
+__root:Tk =None
 __body_frame:Frame=None
 __selectedIndex:int = 0
 
 
 def run():
-    global __root,__body_frame
+    global __root,__body_frame,event_picture_frame,background_label
     __root =Tk()
     app_drawer_frame=side_bar()
-    app_drawer_frame.pack(side=LEFT,anchor='ne',fill='y')
-    __body_frame=Frame(__root)
-    __body_frame.pack(fill='both',side=RIGHT,expand=1)
+    # configuring _root
+    app_drawer_frame.pack(side=LEFT,anchor='ne',fill='y',ipadx=45)
+    event_picture_frame=Frame(__root,bg='black',border=0)
+    event_picture_frame.pack(fill='both',side=RIGHT,expand=1)
+    # configuring reg
+    event_picture_frame.columnconfigure(0,weight=1)
+    event_picture_frame.rowconfigure(0,weight=1)
+    
+    bck_img = dashboard_img()
+    background_label = Label(event_picture_frame,image=bck_img)
+    background_label.grid(row=0,column=1)
+                           
+    __body_frame=Frame(event_picture_frame,bg="#ffffff")
+    __body_frame.grid(row=0,column=0,sticky='nws',ipadx=100)
+    __root.resizable(0,0)
+    __root.state("zoomed")
+    __root.geometry(f"{__root.winfo_screenwidth()}x{__root.winfo_screenheight()}")
     draw_side_bar()
-    # 
     __root.mainloop()
+
+def dashboard_img():
+    bckImage=ImageTk.PhotoImage(Image.open(Dashboard_Background1).resize((396,1024),Image.LANCZOS))
+    return bckImage
+    
+
 
 def side_bar()->Frame:
     app_drawer_frame = Frame(__root,bg="#091924",width=120)
@@ -45,20 +66,20 @@ def side_bar()->Frame:
     menu_option_frame=Frame(app_drawer_frame,bg="#091924",)
 
 
-    event=Label(menu_option_frame,text='Event List',fg="#ffffff",bg="#091924")
+    event=Label(menu_option_frame,text='Event List',fg="#ffffff",bg="#091924",font=('Poppins',12,'bold'))
     event.bind('<Button-1>',lambda e,id=0: updateIndex(id))
     event.pack()
     if(UserProvider().user.isAdmin):
-        create_event=Label(menu_option_frame,text='Create Event',fg='#ffffff',bg="#091924",pady=10)
+        create_event=Label(menu_option_frame,text='Create Event',fg='#ffffff',bg="#091924",pady=10,font=('Poppins',12,'bold'))
         create_event.pack()
         create_event.bind('<Button-1>',lambda e,id=1: updateIndex(id))
     
-    my_ticket=Label(menu_option_frame,text= 'My Ticket List' if (not UserProvider().user.isAdmin) else 'Ticket List',fg='#ffffff',bg="#091924",pady=10)
+    my_ticket=Label(menu_option_frame,text= 'My Ticket List' if (not UserProvider().user.isAdmin) else 'Ticket List',fg='#ffffff',bg="#091924",font=('Poppins',12,'bold'),pady=10)
     my_ticket.bind('<Button-1>',lambda e,id=2: updateIndex(id))
     my_ticket.pack()
     
     if(UserProvider().user.isAdmin):
-        user_list=Label(menu_option_frame,text='User List',fg='#ffffff',bg="#091924",pady=10)
+        user_list=Label(menu_option_frame,text='User List',fg='#ffffff',bg="#091924",font=('Poppins',12,'bold'),pady=10)
         user_list.bind('<Button-1>',lambda e,id=3: updateIndex(id))
         user_list.pack()
 
@@ -99,7 +120,8 @@ def updateIndex(i:int):
     if(__selectedIndex==i):return
     __selectedIndex=i   
     draw_side_bar() 
-    
+                                   
+   
     
 if(__name__=="__main__"):
     run()   
