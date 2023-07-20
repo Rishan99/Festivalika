@@ -34,7 +34,7 @@ def run(frame:Widget):
     __showDropDown()
     __show_event_list()
     __event_list_data_frame.pack(expand=1,fill='both')
-    __root.mainloop()
+    # __root.mainloop()
 
 
 def __showDropDown():

@@ -17,7 +17,7 @@ from utility.assets import *
 event_service = EventService()
 general_service = GeneralService()
 
-__root:Toplevel =None
+__root:Tk =None
 __body_frame:Frame=None
 __selectedIndex:int = 0
 
@@ -40,6 +40,9 @@ def run():
                            
     __body_frame=Frame(event_picture_frame,bg="#ffffff")
     __body_frame.grid(row=0,column=0,sticky='nws',ipadx=100)
+    __root.resizable(0,0)
+    __root.state("zoomed")
+    __root.geometry(f"{__root.winfo_screenwidth()}x{__root.winfo_screenheight()}")
     draw_side_bar()
     __root.mainloop()
 
