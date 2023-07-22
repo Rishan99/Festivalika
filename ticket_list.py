@@ -80,7 +80,7 @@ def __ticket_widget(master,ticket_payment: TicketPaymentEntity)->Widget:
     Label(ticket_payment_frame,text=f'Price: {ticket_payment.price}',bg=backgroundTileColor,).grid(row=row,column=0,sticky="w")
     row+=1
     button_frame = Frame(ticket_payment_frame,bg=backgroundTileColor)
-    button_frame.grid(row=row,column=0)
+    button_frame.grid(row=row,column=0,sticky="w")
     approve_button=Button(button_frame,text="Approve",bg=backgroundTileColor,command=lambda i=ticket_payment.id:approve_ticket(i))
     reject_button=Button(button_frame,text="Reject",bg=backgroundTileColor,command=lambda i=ticket_payment.id:reject_ticket(i),)
     delete_button=Button(button_frame,text="Delete",bg=backgroundTileColor,command=lambda i=ticket_payment.id:delete_ticket(i),)
