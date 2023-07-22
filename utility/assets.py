@@ -19,5 +19,6 @@ backgroundTileColor='#F9F8F8'
 backgroundColor='#ffffff'
 sideBarTitleColor='#ffffff'
 inputFieldFillColor='#eeeeee'
+dropdowncolor='#D9D9D9'
 sideBarBackgroundColor='#091924'
 

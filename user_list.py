@@ -35,7 +35,7 @@ def __show_user_list():
     user_list= user_service.getUserList()
     Label(__root,text=f'Total Users: {len(user_list)}').pack()
     if(len(user_list)==0):
-        Label(__user_list_frame,text="No User Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
+        Label(__user_list_frame,text="No User Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=80,pady=20)
     else:    
         __scrollable_body = ScrollbarFrame(__user_list_frame,)
         __scrollable_body.pack(fill='both',expand=1, anchor='e')
