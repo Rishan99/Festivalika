@@ -60,24 +60,25 @@ def __show_ticket_list():
         for ticket_payment in ticket_list:
             ticket_payment_frame = Frame(ticket_list_frame,bg=backgroundColor,width=300)
             widget=__ticket_widget(ticket_payment_frame,ticket_payment)
-            widget.pack(anchor="w",padx=10,fill=X)
+            widget.pack(anchor="w",fill=X)
             ticket_payment_frame.pack(fill='x',expand=1,anchor='w')
+            Frame(ticket_payment_frame,height=10,width=9999).pack(expand=1,fill=Y)
     
       
 def __ticket_widget(master,ticket_payment: TicketPaymentEntity)->Widget:
     statusColor= pendingColor  if ticket_payment.ticketStatusId==2 else approvedColor if ticket_payment.ticketStatusId==1 else rejectedColor
-    ticket_payment_frame = Frame(master=master,pady=15,bg=backgroundTileColor,padx=15)
+    ticket_payment_frame = Frame(master=master,pady=15,bg=backgroundColor,padx=15)
     row = 0
-    Label(ticket_payment_frame,text=ticket_payment.eventTitle,font=('Arial',12),anchor="w",bg=backgroundTileColor).grid(row=row,column=0,sticky="w")
+    Label(ticket_payment_frame,text=ticket_payment.eventTitle,font=('Arial',12),anchor="w",bg=backgroundColor).grid(row=row,column=0,sticky="w")
     row+=1
-    Label(ticket_payment_frame,text=f'Venue: {ticket_payment.address}',anchor="w",bg=backgroundTileColor).grid(row=row,column=0,sticky="w")
+    Label(ticket_payment_frame,text=f'Venue: {ticket_payment.address}',anchor="w",bg=backgroundColor).grid(row=row,column=0,sticky="w")
     row+=1
     if(UserProvider().user.isAdmin):
-        Label(ticket_payment_frame,text=f'Bought By: {ticket_payment.userName}',bg=backgroundTileColor).grid(row=row,column=0,sticky="w")
+        Label(ticket_payment_frame,text=f'Bought By: {ticket_payment.userName}',bg=backgroundColor).grid(row=row,column=0,sticky="w")
         row+=1
-    Label(ticket_payment_frame,text=f'Status: {ticket_payment.ticketStatus}',fg=statusColor,bg=backgroundTileColor).grid(row=row,column=0,sticky="w")
+    Label(ticket_payment_frame,text=f'Status: {ticket_payment.ticketStatus}',fg=statusColor,bg=backgroundColor).grid(row=row,column=0,sticky="w")
     row+=1
-    Label(ticket_payment_frame,text=f'Price: {ticket_payment.price}',bg=backgroundTileColor,).grid(row=row,column=0,sticky="w")
+    Label(ticket_payment_frame,text=f'Price: {ticket_payment.price}',bg=backgroundColor,).grid(row=row,column=0,sticky="w")
     row+=1
     button_frame = Frame(ticket_payment_frame,bg=backgroundTileColor)
     button_frame.grid(row=row,column=0,sticky="w")
