@@ -49,7 +49,7 @@ def countTotalTicketByStatus(initial:TickeCountEntity,data:TicketPaymentEntity)-
 def __show_ticket_list():
     ticket_list= ticket_payment_service.getAllTicketList() if UserProvider().user.isAdmin  else ticket_payment_service.getUserTicketList(UserProvider().user.id)
     count_data=reduce(countTotalTicketByStatus,ticket_list,TickeCountEntity(0,0,0))
-    Label(__ticket_payment_list_frame,text=f"{'Take a look at all your tickets' if not UserProvider().user.isAdmin else 'Here are list of all the tickets'} ({len(ticket_list)})",font=font.Font(size=13,weight="bold"),bg=backgroundColor).pack(padx=10,anchor='w')
+    Label(__ticket_payment_list_frame,text=f"{'Take a look at all your tickets' if not UserProvider().user.isAdmin else 'Here are list of all the tickets'} ({len(ticket_list)})",font=font.Font(size=13,weight="bold"),bg=backgroundColor).pack(padx=10,anchor='w',pady=(10,0))
     Label(__ticket_payment_list_frame,text=f"Approved: {count_data.approvedCount}, Pending: {count_data.pendingCount}, Rejected : {count_data.RejectedCount}",bg=backgroundColor,).pack(padx=10,anchor='w')
     if(len(ticket_list)==0):
         Label(__ticket_payment_list_frame,text="No Tickets Payment Found",font=font.Font(weight="normal",size=14,),bg=backgroundColor).pack(fill=BOTH,expand=1,padx=80,pady=20)
