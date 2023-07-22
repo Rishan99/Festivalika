@@ -101,7 +101,6 @@ def draw_body_widget():
             ce.run(tk=__body_widget_frame) 
         case 2:
             import ticket_list as tl
-            # change backgrnd
             tl.run(tk=__body_widget_frame) 
         case 3:
             import user_list as ul

@@ -77,9 +77,9 @@ def __show_event_list():
         event_list_frame=__scrollable_body.scrolled_frame
         for event in event_list:
             event_frame = Frame(event_list_frame)
-            widget=__event_widget(event_frame,event)
+            widget=__event_widget(event_frame,event,)
             event_frame.bind("<Button-1>",lambda event, id=event.id: __on_event_pressed(id))
-            widget.pack(anchor="w",padx=10)
+            widget.pack(anchor="w",padx=10,pady=(5,10))
             separator = Separator(event_frame, orient='horizontal')
             separator.pack(fill='x',expand=1,pady=5,padx=10,)
             event_frame.pack(fill='x',expand=1,anchor='w')
@@ -102,11 +102,16 @@ def __event_widget(master,event: EventEntity)->Widget:
         description_label =Label(master=event_frame,text=event.description)
         description_label.grid(row=row,column=0,sticky="w")
         row+=1
-    if(UserProvider().user.isAdmin):
-        Button(event_frame,text="Delete Event",command=lambda id = event.id:delete_event(id)).grid(row=row,column=0,sticky="w")
-        
-        
+    if(not UserProvider().user.isAdmin):
+        buttom_frame = Frame(event_frame)
+        buttom_frame.grid(row=row,column=0,sticky="w")
+        Button(buttom_frame,text="Edit Event",command=lambda id = event.id:edit_event(id)).pack(side=LEFT)
+        Button(buttom_frame,text="Delete Event",command=lambda id = event.id:delete_event(id)).pack(side=RIGHT,padx=8)
     return event_frame
+
+def edit_event(eventId:int):
+    import create_event as ce
+    ce.run(eventId,callback=lambda :__refresh_event_list())
 
 def delete_event(eventId:int):
     response=mb.askyesno(title='Confirm',message="Are you sure you want to delete this event?")

@@ -21,7 +21,8 @@ class EventEntity:
         has_event_ended=False
         start_date=convert_datetime_from_database(self.startDate)
         end_date=convert_datetime_from_database(self.endDate)
-        current_datetime= datetime.now()
+        temp=datetime.now()
+        current_datetime= datetime(temp.year,temp.month,temp.day)
         if(current_datetime>=start_date):
             has_event_started=True
         if(current_datetime>end_date):
@@ -33,7 +34,7 @@ class EventEntity:
                 status_text = f"Event Ends Today" 
             else:
                 status_text = f"Event Ends in {(end_date - current_datetime).days+1} days"       
-        else:    
+        else:
             status_text = f"Event Ended {(current_datetime - end_date).days} days ago"    
         return status_text      
 
