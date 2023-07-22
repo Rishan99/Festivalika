@@ -25,6 +25,8 @@ __selectedIndex:int = 0
 def run():
     global __root,__body_widget_frame
     __root =Tk()
+    __root.title(App_Name)
+    __root.iconbitmap(App_Icon)
     app_drawer_frame=side_bar()
     # configuring _root
     app_drawer_frame.pack(side=LEFT,anchor='ne',fill='y',ipadx=45)
@@ -69,7 +71,7 @@ def side_bar()->Frame:
     side_bar_title_style=('Poppins',12,'bold')
     event=Label(menu_option_frame,text='Event List',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style,pady=5)
     event.bind('<Button-1>',lambda e,id=0: updateIndex(id))
-    event.pack(pady=8)
+    event.pack()
     if(UserProvider().user.isAdmin):
         create_event=Label(menu_option_frame,text='Create Event',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style,pady=5)
         create_event.pack()

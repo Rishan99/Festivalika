@@ -25,12 +25,12 @@ categoryVar=None
 
 
 def run(frame:Widget):
-    global __root,dropdown_options,categoryVar,__event_list_data_frame
+    global __root,dropdown_options,categoryVar,__event_list_data_frame,selectedCategory
     __root =frame
-    __event_list_data_frame=Frame(__root,width=22,bg="blue")
-    # __root.title(str(UserProvider().user.isAdmin))
+    __event_list_data_frame=Frame(__root,width=22)
     dropdown_options=list(map(lambda x:x.name,category_list))
     dropdown_options.insert(0,"All")
+    selectedCategory=None
     categoryVar= StringVar(__event_list_data_frame,value=dropdown_options[0])
     __event_heading()
     __showDropDown()
@@ -71,7 +71,7 @@ def __on_event_pressed(event_id:int):
 def __show_event_list():
     event_list=event_service.getFilteredEventList(datetime.now() if  not UserProvider().user.isAdmin else None,"",selectedCategory)
     if(len(event_list)==0):
-        Label(__event_list_data_frame,text="No Events Found",font=font.Font(weight="normal",size=14,),bg=backgroundColor).pack(fill=BOTH,expand=1,padx=80,pady=80)
+        Label(__event_list_data_frame,text="No Events Found",font=font.Font(weight="normal",size=14,),bg=backgroundColor).pack(fill=BOTH,expand=1,ipadx=120,ipady=80)
     else:    
         __scrollable_body = ScrollbarFrame(__event_list_data_frame)
         __scrollable_body.pack(fill='both',expand=1, anchor='e')
@@ -90,16 +90,20 @@ def __show_event_list():
             # widget.pack(anchor="w",padx=10,pady=(5,10))
             # separator = Separator(event_frame, orient='horizontal')
             # separator.pack(fill='x',expand=1,pady=5,padx=10,)
-            event_frame.pack(expand=1,anchor='w')
+            event_frame.pack(expand=1,anchor='w',fill='x')
             Frame(event_list_frame,height=10,width=9999).pack(expand=1,fill=Y)
     
     #   change layout here
 def __event_widget(master,event: EventEntity)->Widget:
     event_frame = Frame(master=master,bg=backgroundColor,padx=10,pady=10)
+    event_frame.bind("<Button-1>",lambda event, id=event.id: __on_event_pressed(id))
     title_label=Label(event_frame,text=event.title,font=('Poppins',14,'bold'),anchor="w",bg=backgroundColor)
+    title_label.bind("<Button-1>",lambda event, id=event.id: __on_event_pressed(id))
     address_label=Label(event_frame,text="Venue: "+event.address,font=('Poppins',10,'bold'),bg=backgroundColor)
+    address_label.bind("<Button-1>",lambda event, id=event.id: __on_event_pressed(id))
     status_text=event.event_status_text()     
     status_label = Label(event_frame,text=status_text,font=('Poppins',10,'bold'),bg=backgroundColor)
+    status_label.bind("<Button-1>",lambda event, id=event.id: __on_event_pressed(id))
     row=0
     title_label.grid(row=row,column=0,sticky="w")
     row+=1
@@ -112,7 +116,7 @@ def __event_widget(master,event: EventEntity)->Widget:
         description_label.grid(row=row,column=0,sticky="w")
         row+=1
     if(UserProvider().user.isAdmin):
-        buttom_frame = Frame(event_frame)
+        buttom_frame = Frame(event_frame,bg=backgroundColor,)
         buttom_frame.grid(row=row,column=0,sticky="w")
         Button(buttom_frame,text="Edit Event",command=lambda id = event.id:edit_event(id)).pack(side=LEFT)
         Button(buttom_frame,text="Delete Event",command=lambda id = event.id:delete_event(id)).pack(side=RIGHT,padx=8)
