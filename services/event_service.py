@@ -85,14 +85,6 @@ class EventService:
         cur.execute('''DELETE FROM Event WHERE id = ?''', [id])
         cur.connection.commit()
     
-    # This retrieves all the events
-    def getEventList(self)->list:
-        cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT * from Event''', )
-        values =cur.fetchall()
-        return list(map(lambda x:EventEntity.fromMap(x),values)) 
-    
-   
 #    [currentDate]=None for admin
     def getFilteredEventList(self,currentDate,query:str,categoryId:int):
         cur= self.databaseHelper.con.cursor()

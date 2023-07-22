@@ -51,7 +51,6 @@ class GeneralService:
        return UserEntity.fromMap(value)  
    
     def getHashedString(self,data:str):
-        # return argon2.hash_password(data.encode())
         return data
 
     

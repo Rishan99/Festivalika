@@ -10,7 +10,7 @@ class DatabaseHelper:
         return self._instance
 
     def __init__(self):
-        databaseExists =self.checkIfDatabaseExists()
+        databaseExists =self.__checkIfDatabaseExists()
         self.con=sqlite3.connect(self.databasePath)
         # Default the cursor is Tuple ie returns tuple on fetchAll() or fetchOne(), changing to dict so that we can get name of column also
         self.con.row_factory = sqlite3.Row
@@ -84,11 +84,10 @@ class DatabaseHelper:
                         ''')   
         except:
             print("Error Initializing database")
-            raise
+            raise Exception("Error Initializing database")
         
-    def checkIfDatabaseExists(self):
+    def __checkIfDatabaseExists(self):
         return os.path.isfile(self.databasePath)
             
     def __del__(self):
-        # pass
         self.con.close()
