@@ -102,7 +102,7 @@ def __event_widget(master,event: EventEntity)->Widget:
         description_label =Label(master=event_frame,text=event.description)
         description_label.grid(row=row,column=0,sticky="w")
         row+=1
-    if(not UserProvider().user.isAdmin):
+    if(UserProvider().user.isAdmin):
         buttom_frame = Frame(event_frame)
         buttom_frame.grid(row=row,column=0,sticky="w")
         Button(buttom_frame,text="Edit Event",command=lambda id = event.id:edit_event(id)).pack(side=LEFT)
