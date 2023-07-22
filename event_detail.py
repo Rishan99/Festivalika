@@ -38,19 +38,21 @@ def __configureBody():
     event_frame = Frame(master=__root,name='event_frame')
     __event=event_service.getEventByIdWithTicketStatus(__event_id,UserProvider().user.id)
     __root.title(__event.title)
-    title_label=Label(event_frame,text=__event.title,font=('Arial',14),anchor="w")
-    address_label=Label(event_frame,text=__event.address,font=('Arial',10,))
+    event_detail=Label(event_frame,text="Event Details",font=('Poppins',14))
+    event_detail.grid(row=0,column=0,sticky='w')
+    title_label=Label(event_frame,text="Event Name: "+__event.title,font=('Poppins',8,'bold'),anchor="w")
+    address_label=Label(event_frame,text="Venue: "+__event.address,font=('Poppins',8,'bold'))
     status_text=__event.event_status_text()
     frame1 = Frame(master=event_frame)       
-    status_label = Label(frame1,text=status_text,font=font.Font(weight="bold",size=10))
-    price_label=Label(frame1,text="Price: "+str(__event.price),fg="#6a3bff")
+    status_label = Label(frame1,text=status_text,font=font.Font(weight="bold",size=9))
+    price_label=Label(frame1,text="Price: "+str(__event.price),font=('Poppins',8,'bold'))
     description_label =Label(master=event_frame,text=__event.description)
-    title_label.pack()
-    address_label.pack()
-    frame1.pack()
-    status_label.pack(side=LEFT)
-    price_label.pack(side=LEFT)
-    description_label.pack()
+    title_label.grid(column=0,row=1,sticky='w')
+    address_label.grid(column=0,row=2,sticky='w')
+    frame1.grid(column=0,row=3,sticky='w')
+    status_label.grid(column=0,row=0,sticky='w')
+    price_label.grid(column=0,row=1,sticky='w')
+    description_label.grid(column=0,row=4,sticky='w')
     __ticket_status_widget(event_frame,)
     event_frame.pack()   
 
@@ -59,11 +61,11 @@ def __ticket_status_widget(master:Widget):
         return
     global __event,__ticket_button
     if(__event.canBuyTicket):
-        __ticket_button =Button(master=master,text="Buy Ticket",command=__buy_ticket)
-        __ticket_button.pack(side=BOTTOM)
+        __ticket_button =Button(master=master,text="Buy Ticket",command=__buy_ticket,bg=primaryColor,font=('Poppins',8,'bold'))
+        __ticket_button.grid(column=0,row=5)
     elif(__event.ticketStatusId is not None):
-        __ticket_button = Label(master,text=f"Your Ticket Status is {__event.ticketStatusName}",font=font.Font(weight="bold",size=13))  
-        __ticket_button.pack(side=BOTTOM) 
+        __ticket_button = Label(master,text=f"Your Ticket Status is {__event.ticketStatusName}",font=font.Font(weight="bold",size=12))  
+        __ticket_button.grid(column=0,row=5) 
               
     
 def __buy_ticket():

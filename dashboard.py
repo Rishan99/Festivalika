@@ -33,22 +33,25 @@ def run():
     
     # configuring 
     body_frame.columnconfigure(0,weight=1)
+    body_frame.columnconfigure(1,weight=1)
     body_frame.rowconfigure(0,weight=1)
-    
+
+    __body_widget_frame=Frame(body_frame,bg=backgroundColor)
+    __body_widget_frame.grid(row=0,column=0,sticky='nwes',ipadx=200)
+
     bck_img = dashboard_img()
     background_label = Label(body_frame,image=bck_img)
-    background_label.grid(row=0,column=1)
+    background_label.grid(row=0,column=1,sticky='news')
        
-    __body_widget_frame=Frame(body_frame,bg=backgroundColor,width=9999)
-    __body_widget_frame.grid(row=0,column=1,sticky='nws',ipadx=300,)
-    __root.resizable(0,0)
-    __root.state("zoomed")
+    
+    # __root.resizable(0,0)
+    # __root.state("zoomed")
     __root.geometry(f"{__root.winfo_screenwidth()}x{__root.winfo_screenheight()}")
     draw_body_widget()
     __root.mainloop()
 
 def dashboard_img():
-    bckImage=ImageTk.PhotoImage(Image.open(Dashboard_Background1).resize((__root.winfo_screenwidth(),__root.winfo_screenwidth()),Image.LANCZOS))
+    bckImage=ImageTk.PhotoImage(Image.open(Dashboard_Background1).resize((396,1024),Image.LANCZOS))
     return bckImage
     
 
@@ -61,7 +64,7 @@ def side_bar()->Frame:
     side_bar_title_style=('Poppins',12,'bold')
     event=Label(menu_option_frame,text='Event List',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style)
     event.bind('<Button-1>',lambda e,id=0: updateIndex(id))
-    event.pack()
+    event.pack(pady=8)
     if(UserProvider().user.isAdmin):
         create_event=Label(menu_option_frame,text='Create Event',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style)
         create_event.pack()
@@ -76,7 +79,7 @@ def side_bar()->Frame:
         user_list.bind('<Button-1>',lambda e,id=3: updateIndex(id))
         user_list.pack()
 
-    Frame(menu_option_frame,bg=sideBarBackgroundColor).pack(expand=1,fill='y',anchor='s',)
+    Frame(menu_option_frame,bg=sideBarBackgroundColor).pack(fill='y',anchor='s',ipady=260)
     log_out=Label(menu_option_frame,text='Log Out',fg=sideBarTitleColor,bg=sideBarBackgroundColor,pady=10,font=side_bar_title_style)
     log_out.bind('<Button-1>',logout)
     log_out.pack()
