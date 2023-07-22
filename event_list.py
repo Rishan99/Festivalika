@@ -9,6 +9,7 @@ from services.event_service import EventService
 from datetime import datetime
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
+from utility.helper import error_message_box
 from widgets.scrollable import  ScrollbarFrame
 from utility.assets import *
 
@@ -65,7 +66,6 @@ def __refresh_event_list():
 
 def __on_event_pressed(event_id:int):
     ed.run(event_id)
-    # pass
 
 def __show_event_list():
     event_list=event_service.getFilteredEventList(datetime.now() if  not UserProvider().user.isAdmin else None,"",selectedCategory)
@@ -91,10 +91,28 @@ def __event_widget(master,event: EventEntity)->Widget:
     address_label=Label(event_frame,text="Venue: "+event.address,font=('Poppins',10,'bold'))
     status_text=event.event_status_text()     
     status_label = Label(event_frame,text=status_text,font=('Poppins',10,'bold'))
-    description_label =Label(master=event_frame,text=event.description)
-    title_label.grid(row=0,column=0,sticky="w")
-    address_label.grid(row=1,column=0,sticky="w")
-    status_label.grid(row=2,column=0,sticky="w")
-    description_label.grid(row=3,column=0,sticky="w")
+    row=0
+    title_label.grid(row=row,column=0,sticky="w")
+    row+=1
+    address_label.grid(row=row,column=0,sticky="w")
+    row+=1
+    status_label.grid(row=row,column=0,sticky="w")
+    row+=1
+    if(len(event.description)>0):
+        description_label =Label(master=event_frame,text=event.description)
+        description_label.grid(row=row,column=0,sticky="w")
+        row+=1
+    if(UserProvider().user.isAdmin):
+        Button(event_frame,text="Delete Event",command=lambda id = event.id:delete_event(id)).grid(row=row,column=0,sticky="w")
+        
+        
     return event_frame
-    
+
+def delete_event(eventId:int):
+    response=mb.askyesno(title='Confirm',message="Are you sure you want to delete this event?")
+    if(response):
+        try:
+            event_service.deleteEvent(eventId)
+            __refresh_event_list()
+        except BaseException as ex:
+            error_message_box(str(ex))

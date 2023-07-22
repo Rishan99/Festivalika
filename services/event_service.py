@@ -76,13 +76,13 @@ class EventService:
     
     def deleteEvent(self,id:int):    
         cur= self.databaseHelper.con.cursor()
-        cur.execute('SELECT id FROM TicketPayment WHERE eventId=? LIMIT',[id])
+        cur.execute('SELECT id FROM TicketPayment WHERE eventId=? LIMIT 1',[id])
         value =cur.fetchone()
         paymentExists= (value != None)  
         if(paymentExists):
-            raise Exception("Cannot delete event, User has already applied for ticket for this event")
-        cur.execute('DELETE FROM EventCategoryAssociation WHERE EventId = ?',[id])
-        cur.execute('''DELETE Event WHERE id = ?''', [id])
+            raise Exception("Cannot delete event, One or more User has already bought ticket for this event")
+        cur.execute('DELETE FROM EventCategoryAssociation WHERE eventId = ?',[id])
+        cur.execute('''DELETE FROM Event WHERE id = ?''', [id])
         cur.connection.commit()
     
     # This retrieves all the events
