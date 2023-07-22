@@ -6,7 +6,6 @@ from entity.ticket_payment_entity import TicketPaymentEntity
 from services.database_helper import DatabaseHelper
 from services.event_service import EventService
 
-
 class TicketPaymentService:
     def __init__(self):
         self.databaseHelper=DatabaseHelper()

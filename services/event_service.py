@@ -1,15 +1,8 @@
-
-
-
 from datetime import datetime
 from entity.category_entity import CategoryEntity
 from entity.event.event_detail_entity import EventDetailEntity
 from entity.event.event_entity import EventEntity
 from services.database_helper import DatabaseHelper
-
-# import services.ticket_payment_service as tp
-
-
 
 class EventService:
     def __init__(self):
@@ -113,7 +106,4 @@ class EventService:
         if(value == None):
             return False
         return dict(value).get("canBuyTicket")==1
-              
-                      
-   
  
