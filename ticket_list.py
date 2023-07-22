@@ -61,7 +61,7 @@ def __show_ticket_list():
             ticket_payment_frame = Frame(ticket_list_frame,bg=backgroundColor,width=300)
             widget=__ticket_widget(ticket_payment_frame,ticket_payment)
             widget.pack(anchor="w",padx=10,fill=X)
-            ticket_payment_frame.pack(fill='x',expand=1,anchor='w')
+            ticket_payment_frame.pack(fill='x',expand=1,anchor='w',pady=2)
     
       
 def __ticket_widget(master,ticket_payment: TicketPaymentEntity)->Widget:
@@ -74,9 +74,9 @@ def __ticket_widget(master,ticket_payment: TicketPaymentEntity)->Widget:
     Label(ticket_payment_frame,text=f'Price: {ticket_payment.price}',bg=backgroundTileColor,).grid(row=4,column=0,sticky="w")
     button_frame = Frame(ticket_payment_frame,bg=backgroundTileColor)
     button_frame.grid(row=5,column=0)
-    approve_button=Button(button_frame,text="Approve",bg=backgroundTileColor,command=lambda i=ticket_payment.id:approve_ticket(i))
-    reject_button=Button(button_frame,text="Reject",bg=backgroundTileColor,command=lambda i=ticket_payment.id:reject_ticket(i),)
-    delete_button=Button(button_frame,text="Delete",bg=backgroundTileColor,command=lambda i=ticket_payment.id:delete_ticket(i),)
+    approve_button=Button(button_frame,text="Approve",bg='green',fg=backgroundColor,command=lambda i=ticket_payment.id:approve_ticket(i))
+    reject_button=Button(button_frame,text="Reject",bg='red',fg=backgroundColor,command=lambda i=ticket_payment.id:reject_ticket(i),)
+    delete_button=Button(button_frame,text="Delete",bg='orange',fg=backgroundColor,command=lambda i=ticket_payment.id:delete_ticket(i),)
 
     if(UserProvider().user.isAdmin):
         if(ticket_payment.ticketStatusId == 1):

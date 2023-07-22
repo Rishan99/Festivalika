@@ -79,7 +79,7 @@ def side_bar()->Frame:
         user_list.bind('<Button-1>',lambda e,id=3: updateIndex(id))
         user_list.pack()
 
-    Frame(menu_option_frame,bg=sideBarBackgroundColor).pack(fill='y',anchor='s',ipady=260)
+    Frame(menu_option_frame,bg=sideBarBackgroundColor).pack(fill='y',anchor='s',ipady=200)
     log_out=Label(menu_option_frame,text='Log Out',fg=sideBarTitleColor,bg=sideBarBackgroundColor,pady=10,font=side_bar_title_style)
     log_out.bind('<Button-1>',logout)
     log_out.pack()
