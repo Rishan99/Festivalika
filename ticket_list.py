@@ -49,10 +49,10 @@ def countTotalTicketByStatus(initial:TickeCountEntity,data:TicketPaymentEntity)-
 def __show_ticket_list():
     ticket_list= ticket_payment_service.getAllTicketList() if UserProvider().user.isAdmin  else ticket_payment_service.getUserTicketList(UserProvider().user.id)
     count_data=reduce(countTotalTicketByStatus,ticket_list,TickeCountEntity(0,0,0))
-    Label(__ticket_payment_list_frame,text=f"{'Take a look at all your tickets' if not UserProvider().user.isAdmin else 'Here are list of all the tickets'} ({len(ticket_list)})",font=font.Font(size=13,weight="bold"),bg=backgroundColor).pack(padx=10,anchor='w')
+    Label(__ticket_payment_list_frame,text=f"{'Take a look at all your tickets' if not UserProvider().user.isAdmin else 'Here are list of all the tickets'} ({len(ticket_list)})",font=font.Font(size=13,weight="bold"),bg=backgroundColor).pack(padx=10,anchor='w',pady=(10,0))
     Label(__ticket_payment_list_frame,text=f"Approved: {count_data.approvedCount}, Pending: {count_data.pendingCount}, Rejected : {count_data.RejectedCount}",bg=backgroundColor,).pack(padx=10,anchor='w')
     if(len(ticket_list)==0):
-        Label(__ticket_payment_list_frame,text="No Tickets Payment Found",font=font.Font(weight="normal",size=14,),bg=backgroundColor).pack(fill=BOTH,expand=1,padx=20,pady=20)
+        Label(__ticket_payment_list_frame,text="No Tickets Payment Found",font=font.Font(weight="normal",size=14,),bg=backgroundColor).pack(fill=BOTH,expand=1,padx=80,pady=20)
     else:    
         __scrollable_body = ScrollbarFrame(__ticket_payment_list_frame,)
         __scrollable_body.pack(fill='both',expand=1, anchor='e',pady=20)
@@ -60,23 +60,31 @@ def __show_ticket_list():
         for ticket_payment in ticket_list:
             ticket_payment_frame = Frame(ticket_list_frame,bg=backgroundColor,width=300)
             widget=__ticket_widget(ticket_payment_frame,ticket_payment)
-            widget.pack(anchor="w",padx=10,fill=X)
-            ticket_payment_frame.pack(fill='x',expand=1,anchor='w',pady=2)
+            widget.pack(anchor="w",fill=X)
+            ticket_payment_frame.pack(fill='x',expand=1,anchor='w')
+            Frame(ticket_payment_frame,height=10,width=9999).pack(expand=1,fill=Y)
     
       
 def __ticket_widget(master,ticket_payment: TicketPaymentEntity)->Widget:
     statusColor= pendingColor  if ticket_payment.ticketStatusId==2 else approvedColor if ticket_payment.ticketStatusId==1 else rejectedColor
-    ticket_payment_frame = Frame(master=master,pady=15,bg=backgroundTileColor,padx=15)
-    Label(ticket_payment_frame,text=ticket_payment.eventTitle,font=('Arial',12),anchor="w",bg=backgroundTileColor).grid(row=0,column=0,sticky="w")
-    Label(ticket_payment_frame,text=f'Venue: {ticket_payment.address}',anchor="w",bg=backgroundTileColor).grid(row=1,column=0,sticky="w")
-    Label(ticket_payment_frame,text=f'Bought By: {ticket_payment.userName}',bg=backgroundTileColor).grid(row=2,column=0,sticky="w")
-    Label(ticket_payment_frame,text=f'Status: {ticket_payment.ticketStatus}',fg=statusColor,bg=backgroundTileColor).grid(row=3,column=0,sticky="w")
-    Label(ticket_payment_frame,text=f'Price: {ticket_payment.price}',bg=backgroundTileColor,).grid(row=4,column=0,sticky="w")
+    ticket_payment_frame = Frame(master=master,pady=15,bg=backgroundColor,padx=15)
+    row = 0
+    Label(ticket_payment_frame,text=ticket_payment.eventTitle,font=('Arial',12),anchor="w",bg=backgroundColor).grid(row=row,column=0,sticky="w")
+    row+=1
+    Label(ticket_payment_frame,text=f'Venue: {ticket_payment.address}',anchor="w",bg=backgroundColor).grid(row=row,column=0,sticky="w")
+    row+=1
+    if(UserProvider().user.isAdmin):
+        Label(ticket_payment_frame,text=f'Bought By: {ticket_payment.userName}',bg=backgroundColor).grid(row=row,column=0,sticky="w")
+        row+=1
+    Label(ticket_payment_frame,text=f'Status: {ticket_payment.ticketStatus}',fg=statusColor,bg=backgroundColor).grid(row=row,column=0,sticky="w")
+    row+=1
+    Label(ticket_payment_frame,text=f'Price: {ticket_payment.price}',bg=backgroundColor,).grid(row=row,column=0,sticky="w")
+    row+=1
     button_frame = Frame(ticket_payment_frame,bg=backgroundTileColor)
-    button_frame.grid(row=5,column=0)
-    approve_button=Button(button_frame,text="Approve",bg='green',fg=backgroundColor,command=lambda i=ticket_payment.id:approve_ticket(i))
-    reject_button=Button(button_frame,text="Reject",bg='red',fg=backgroundColor,command=lambda i=ticket_payment.id:reject_ticket(i),)
-    delete_button=Button(button_frame,text="Delete",bg='orange',fg=backgroundColor,command=lambda i=ticket_payment.id:delete_ticket(i),)
+    button_frame.grid(row=row,column=0,sticky="w")
+    approve_button=Button(button_frame,text="Approve",bg=backgroundTileColor,command=lambda i=ticket_payment.id:approve_ticket(i))
+    reject_button=Button(button_frame,text="Reject",bg=backgroundTileColor,command=lambda i=ticket_payment.id:reject_ticket(i),)
+    delete_button=Button(button_frame,text="Delete",bg=backgroundTileColor,command=lambda i=ticket_payment.id:delete_ticket(i),)
 
     if(UserProvider().user.isAdmin):
         if(ticket_payment.ticketStatusId == 1):
@@ -85,6 +93,9 @@ def __ticket_widget(master,ticket_payment: TicketPaymentEntity)->Widget:
             delete_button.pack(side=LEFT,padx=8)
         elif(ticket_payment.ticketStatusId==3):
             delete_button.pack(side=LEFT)
+    elif(ticket_payment.ticketStatusId == 1):
+        delete_button.pack(side=LEFT)
+                
     return ticket_payment_frame
 
 def approve_ticket(ticket_id:int):

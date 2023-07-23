@@ -14,4 +14,7 @@ class EventDetailEntity(EventEntity):
     @classmethod
     def fromMap(self, data):
         map=dict(data)
-        return self(map.get('id'), map.get('title'),map.get('address'),map.get('description'),map.get('startDate'),map.get('endDate'),map.get('price'),map.get('createdDate'),map.get("canBuyTicket"), map.get("ticketStatusId"), map.get("categoryId"), map.get("categoryName"), map.get("ticketStatusName"))
+        return self(map.get('id'), map.get('title'),map.get('address'),map.get('description'),
+                    map.get('startDate'),map.get('endDate'),map.get('price'),map.get('createdDate'),
+                    map.get("canBuyTicket"), map.get("ticketStatusId"), map.get("categoryId"),
+                    map.get("categoryName"), map.get("ticketStatusName"))

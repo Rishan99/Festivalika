@@ -1,14 +1,10 @@
-
-
 from entity.user_entity import UserEntity
 from services.database_helper import DatabaseHelper
 from services.general_service import GeneralService
 from services.ticket_payment_service import TicketPaymentService
 
-
 ticketPaymentService = TicketPaymentService()
 generalService = GeneralService()
-
 
 class AuthService:
     def __init__(self):
@@ -21,7 +17,6 @@ class AuthService:
        cur.close()
        print()
        return int(dict(value).get('count')) >0
-   
         
    
     def loginUser(self,username:str, password:str):
@@ -55,8 +50,4 @@ class AuthService:
         cur= self.databaseHelper.con.cursor()
         cur.execute('''INSERT INTO User (name,username,address,gender,password) VALUES (?,?,?,?,?)''', [user.name,user.username,user.address,user.gender,generalService.getHashedString(user.password)])
         cur.connection.commit()
-        cur.close()   
-                   
-
-   
-    
+        cur.close()      

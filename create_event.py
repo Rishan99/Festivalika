@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from time import sleep
 from tkinter import *
 from tkinter import messagebox as mb
 from PIL import ImageTk,Image
@@ -17,25 +18,44 @@ eventService = EventService()
 categoryList:list=GeneralService().getCategoryList()
 # __root:Toplevel=None
 event_id:int|None=None
+event_update_callback:None=None
 
 
-
-def run(id:int|None=None,tk:Widget|None=None): 
+def run(id:int|None=None,tk:Widget|None=None,callback=None): 
     
     """ 
     Pass [id] if you want to update event, else pass as None to create a new event
     """
-    global event_id,categoryList
+    global event_id,categoryList,event_update_callback
+    event_update_callback=callback
     event_id=id
     global __root
     __root = tk if(tk is not None ) else Tk()
+
     title_var=StringVar(__root)
     price_var=DoubleVar(__root)
     address_var=StringVar(__root)
     start_date_var=StringVar(__root)
+    
     end_date_var=StringVar(__root)
     event_detail_frame=LabelFrame(__root,bg="#d8d8d8",border=0)
     event_detail_frame.grid(row=0,column=0,ipady=90)
+    description_entry=Text(event_detail_frame,width=50,border=0,)
+    # Getting details of event Id is event Id is not null, means that this GUI is for upadting event
+    if(event_id is not None):
+        event_detail:EventEntity=eventService.getEventById(event_id)
+        selected_categories:list=eventService.getCateoriesListByEventId(event_id)
+        for cat in selected_categories:
+            try:
+                list_box.select_set(list(list_box.get(0,END)).index(cat.name))
+            except:
+                pass    
+        start_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.startDate))) 
+        end_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
+        title_var.set(event_detail.title)  
+        description_entry.insert("0.0",event_detail.description)
+        price_var.set(event_detail.price)  
+        address_var.set(event_detail.address)  
 
     # widgets inside frame
     Label(event_detail_frame,text="Create Event" if event_id is None else "Update Event",font=('Arial',"18","bold"),bg='#d8d8d8',fg="#6a3bff").grid(row=0,column=0,sticky='sw',padx=25,ipady=7)
@@ -88,7 +108,7 @@ def run(id:int|None=None,tk:Widget|None=None):
         row+=3
     # 
     placeTitle(event_detail_frame,"Description",1,1)
-    description_entry=Text(event_detail_frame,width=50,border=0,)
+    
     description_entry.grid(row=2,column=1,sticky='nw',padx=25,ipady=8,rowspan=10,columnspan=1)
     # 
     loginButton=Button(event_detail_frame,text="Create Event" if event_id is None else "Update Event",fg="white",bg="#6a3bff",command=lambda :
@@ -96,23 +116,6 @@ def run(id:int|None=None,tk:Widget|None=None):
                                  start_date_entry.get(),end_date_entry.get(),list(map(lambda x:next(filter(lambda z:z.name == list_box.get(x),categoryList)).id,
                                  list_box.curselection()))))
     loginButton.grid(row=row,column=0,columnspan=2,sticky="s",ipady=8,pady=15,ipadx=60)
-    
-    # Getting details of event Id is event Id is not null, means that this GUI is for upadting event
-    if(event_id is not None):
-        event_detail:EventEntity=eventService.getEventById(event_id)
-        selected_categories:list=eventService.getCateoriesListByEventId(event_id)
-        for cat in selected_categories:
-            try:
-                list_box.select_set(list(list_box.get(0,END)).index(cat.name))
-            except:
-                pass    
-        title_var.set(event_detail.title)  
-        description_entry.insert("0.0",event_detail.description)
-        price_var.set(event_detail.price)  
-        address_var.set(event_detail.address)  
-        start_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.startDate))) 
-        end_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
-        
     if(tk is not None):
         __root.mainloop()
 
@@ -126,6 +129,8 @@ def __create_or_update_event(title:str,address:str,price:str,description:str,sta
             success_message_box("Event has been added")
         else:
             eventService.updateEvent(entity,category_list)
+            if(event_update_callback is not None):
+                event_update_callback()
             success_message_box("Event has been updated")
     except BaseException as ex:
         error_message_box(str(ex)) 

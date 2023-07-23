@@ -6,7 +6,6 @@ from entity.ticket_payment_entity import TicketPaymentEntity
 from services.database_helper import DatabaseHelper
 from services.event_service import EventService
 
-
 class TicketPaymentService:
     def __init__(self):
         self.databaseHelper=DatabaseHelper()
@@ -24,7 +23,8 @@ class TicketPaymentService:
         
     def getUserTicketList(self,userId:int)->list:
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name as userName, tp.createdDate,e.price,e.address
+        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, 
+                    u.name as userName, tp.createdDate,e.price,e.address
                     from TicketPayment tp 
                     INNER JOIN Event e on tp.eventId = e.Id
                     INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
@@ -36,7 +36,8 @@ class TicketPaymentService:
      
     def getAllTicketList(self)->list:
         cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, u.name as userName, tp.createdDate,e.price,e.address
+        cur.execute('''SELECT e.id as eventId, e.title as eventTitle, tp.id, tp.ticketStatusId, ts.name as ticketStatus, tp.userId, 
+                    u.name as userName, tp.createdDate,e.price,e.address
                     from TicketPayment tp 
                     INNER JOIN Event e on tp.eventId = e.Id
                     INNER JOIN TicketStatus ts on ts.id = tp.ticketStatusId
@@ -47,7 +48,7 @@ class TicketPaymentService:
         return list(map(lambda x:TicketPaymentEntity.fromMap(x),values ))    
           
     def approveEventTicket(self,id:int)->bool:
-        ticketInfo = self.getTicketPayementInfo(id)
+        ticketInfo = self.__getTicketPayementInfo(id)
         cur= self.databaseHelper.con.cursor()
         cur.execute('''UPDATE TicketPayment SET ticketStatusId=2 WHERE id = ?''',[id])
         cur.connection.commit()
@@ -56,7 +57,7 @@ class TicketPaymentService:
 
  
     def rejectEventTicket(self,id:int)->bool:
-        ticketInfo = self.getTicketPayementInfo(id)
+        ticketInfo = self.__getTicketPayementInfo(id)
         cur= self.databaseHelper.con.cursor()
         cur.execute('''UPDATE TicketPayment SET ticketStatusId=3 WHERE id=?''',[id])
         cur.connection.commit()
@@ -64,7 +65,7 @@ class TicketPaymentService:
         return True
         
     def deleteEventTicket(self,id:int)->bool:
-        ticketInfo = self.getTicketPayementInfo(id)
+        ticketInfo = self.__getTicketPayementInfo(id)
         if(dict(ticketInfo).get('ticketStatusId')==2):
             raise BaseException ("Approved Ticket cannot be deleted")
         cur= self.databaseHelper.con.cursor()
@@ -73,7 +74,7 @@ class TicketPaymentService:
         cur.close()
         return True
         
-    def getTicketPayementInfo(self,id:int):
+    def __getTicketPayementInfo(self,id:int):
         cur= self.databaseHelper.con.cursor()
         cur.execute('SELECT * FROM TicketPayment WHERE id = ?',[id])
         value =cur.fetchone()

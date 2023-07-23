@@ -25,6 +25,8 @@ __selectedIndex:int = 0
 def run():
     global __root,__body_widget_frame
     __root =Tk()
+    __root.title(App_Name)
+    __root.iconbitmap(App_Icon)
     app_drawer_frame=side_bar()
     # configuring _root
     app_drawer_frame.pack(side=LEFT,anchor='ne',fill='y',ipadx=45)
@@ -33,15 +35,21 @@ def run():
     
     # configuring 
     body_frame.columnconfigure(0,weight=1)
-    body_frame.columnconfigure(1,weight=1)
     body_frame.rowconfigure(0,weight=1)
 
-    __body_widget_frame=Frame(body_frame,bg=backgroundColor)
-    __body_widget_frame.grid(row=0,column=0,sticky='nwes',ipadx=200)
+
 
     bck_img = dashboard_img()
     background_label = Label(body_frame,image=bck_img)
-    background_label.grid(row=0,column=1,sticky='news')
+    background_label.grid(row=0,column=0)
+
+    __body_widget_frame=Frame(body_frame,bg=backgroundColor)
+    __body_widget_frame.grid(row=0,column=0,sticky='nws',ipadx=250)
+    
+    # __root.resizable(0,0)
+    # __root.state("zoomed")
+    
+    
        
     
     # __root.resizable(0,0)
@@ -51,9 +59,8 @@ def run():
     __root.mainloop()
 
 def dashboard_img():
-    bckImage=ImageTk.PhotoImage(Image.open(Dashboard_Background1).resize((396,1024),Image.LANCZOS))
+    bckImage=ImageTk.PhotoImage(Image.open(Dashboard_Background1).resize((__root.winfo_screenwidth(),__root.winfo_screenheight()),Image.LANCZOS))
     return bckImage
-    
 
 
 def side_bar()->Frame:
@@ -62,20 +69,20 @@ def side_bar()->Frame:
     title_label.pack()
     menu_option_frame=Frame(app_drawer_frame,bg=sideBarBackgroundColor,)
     side_bar_title_style=('Poppins',12,'bold')
-    event=Label(menu_option_frame,text='Event List',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style)
+    event=Label(menu_option_frame,text='Event List',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style,pady=5)
     event.bind('<Button-1>',lambda e,id=0: updateIndex(id))
-    event.pack(pady=8)
+    event.pack()
     if(UserProvider().user.isAdmin):
-        create_event=Label(menu_option_frame,text='Create Event',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style)
+        create_event=Label(menu_option_frame,text='Create Event',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style,pady=5)
         create_event.pack()
         create_event.bind('<Button-1>',lambda e,id=1: updateIndex(id))
     
-    my_ticket=Label(menu_option_frame,text= 'My Ticket List' if (not UserProvider().user.isAdmin) else 'Ticket List',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style,pady=10)
+    my_ticket=Label(menu_option_frame,text= 'My Ticket List' if (not UserProvider().user.isAdmin) else 'Ticket List',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style,pady=5)
     my_ticket.bind('<Button-1>',lambda e,id=2: updateIndex(id))
     my_ticket.pack()
     
     if(UserProvider().user.isAdmin):
-        user_list=Label(menu_option_frame,text='User List',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style,)
+        user_list=Label(menu_option_frame,text='User List',fg=sideBarTitleColor,bg=sideBarBackgroundColor,font=side_bar_title_style,pady=5)
         user_list.bind('<Button-1>',lambda e,id=3: updateIndex(id))
         user_list.pack()
 
@@ -113,6 +120,7 @@ def draw_body_widget():
         
 def updateIndex(i:int):
     global __selectedIndex
+    
     if(__selectedIndex==i):return
     __selectedIndex=i   
     draw_body_widget() 

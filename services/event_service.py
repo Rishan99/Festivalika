@@ -1,15 +1,8 @@
-
-
-
 from datetime import datetime
 from entity.category_entity import CategoryEntity
 from entity.event.event_detail_entity import EventDetailEntity
 from entity.event.event_entity import EventEntity
 from services.database_helper import DatabaseHelper
-
-# import services.ticket_payment_service as tp
-
-
 
 class EventService:
     def __init__(self):
@@ -76,23 +69,15 @@ class EventService:
     
     def deleteEvent(self,id:int):    
         cur= self.databaseHelper.con.cursor()
-        cur.execute('SELECT id FROM TicketPayment WHERE eventId=? LIMIT',[id])
+        cur.execute('SELECT id FROM TicketPayment WHERE eventId=? LIMIT 1',[id])
         value =cur.fetchone()
         paymentExists= (value != None)  
         if(paymentExists):
-            raise Exception("Cannot delete event, User has already applied for ticket for this event")
-        cur.execute('DELETE FROM EventCategoryAssociation WHERE EventId = ?',[id])
-        cur.execute('''DELETE Event WHERE id = ?''', [id])
+            raise Exception("Cannot delete event, One or more User has already bought ticket for this event")
+        cur.execute('DELETE FROM EventCategoryAssociation WHERE eventId = ?',[id])
+        cur.execute('''DELETE FROM Event WHERE id = ?''', [id])
         cur.connection.commit()
     
-    # This retrieves all the events
-    def getEventList(self)->list:
-        cur= self.databaseHelper.con.cursor()
-        cur.execute('''SELECT * from Event''', )
-        values =cur.fetchall()
-        return list(map(lambda x:EventEntity.fromMap(x),values)) 
-    
-   
 #    [currentDate]=None for admin
     def getFilteredEventList(self,currentDate,query:str,categoryId:int):
         cur= self.databaseHelper.con.cursor()
@@ -121,7 +106,4 @@ class EventService:
         if(value == None):
             return False
         return dict(value).get("canBuyTicket")==1
-              
-                      
-   
  

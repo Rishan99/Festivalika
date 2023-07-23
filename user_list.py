@@ -34,9 +34,10 @@ def __refresh_user_list():
 
 def __show_user_list():
     user_list= user_service.getUserList()
-    Label(__root,text=f'Total Users: {len(user_list)}',bg=backgroundColor).pack()
+    Label(__root,text="User List",font=font.Font(weight="bold",size=16),bg=backgroundColor).pack(padx=10,anchor='w',pady=(10,0))  
+    Label(__root,text=f'Total Users: {len(user_list)}',bg=backgroundColor).pack(padx=10,anchor='w',pady=(0,5))
     if(len(user_list)==0):
-        Label(__user_list_frame,text="No User Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=20,pady=20)
+        Label(__user_list_frame,text="No User Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=80,pady=20)
     else:    
         __scrollable_body = ScrollbarFrame(__user_list_frame,)
         __scrollable_body.pack(fill='both',expand=1, anchor='e')
@@ -45,16 +46,15 @@ def __show_user_list():
         for user in user_list:
             user_frame = Frame(user_list_frame,bg='#999999')
             widget=__user_widget(user_frame,user)
-            widget.pack(anchor="w",padx=10)
-            # separator = Separator(user_frame, orient='horizontal')
-            # separator.pack(fill='x',expand=1,pady=5,padx=10,)
-            user_frame.pack(fill='x',expand=1,anchor='w',pady=1,ipady=10)
+            widget.pack(anchor="w",fill=X)
+            user_frame.pack(fill='x',expand=1,anchor='w')
+            Frame(user_list_frame,height=10,width=9999).pack(expand=1,fill=Y)
     
 #    change heree   
 def __user_widget(master,user: UserEntity)->Widget:
-    user_frame = Frame(master=master)
-    name_label=Label(user_frame,text=user.name,font=('Arial',14),anchor="w",bg='#999999')
-    username_label=Label(user_frame,text=user.username,font=('Arial',10,),bg='#999999')
+    user_frame = Frame(master=master,bg=backgroundColor,padx=10,pady=10)
+    name_label=Label(user_frame,text=user.name,font=('Arial',14),anchor="w",bg=backgroundColor)
+    username_label=Label(user_frame,text=user.username,font=('Arial',10,),bg=backgroundColor)
     name_label.grid(row=0,column=0,sticky="w")
     username_label.grid(row=1,column=0,sticky="w")
     # delete_button=Button(user_frame,text="Delete",command=lambda i=user.id:delete_user(i))
