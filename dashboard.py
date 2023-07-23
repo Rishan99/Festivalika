@@ -44,7 +44,7 @@ def run():
     background_label.grid(row=0,column=0)
 
     __body_widget_frame=Frame(body_frame,bg=backgroundColor)
-    __body_widget_frame.grid(row=0,column=0,sticky='nws',ipadx=250)
+    __body_widget_frame.grid(row=0,column=0,sticky='nws',ipadx=150)
     
     # __root.resizable(0,0)
     # __root.state("zoomed")
@@ -59,7 +59,7 @@ def run():
     __root.mainloop()
 
 def dashboard_img():
-    bckImage=ImageTk.PhotoImage(Image.open(Dashboard_Background1).resize((__root.winfo_screenwidth(),__root.winfo_screenheight()),Image.LANCZOS))
+    bckImage=ImageTk.PhotoImage(Image.open(Dashboard_Background2).resize((__root.winfo_screenwidth(),__root.winfo_screenheight()),Image.LANCZOS))
     return bckImage
 
 
@@ -126,6 +126,3 @@ def updateIndex(i:int):
     draw_body_widget() 
                                    
    
-    
-if(__name__=="__main__"):
-    run()   

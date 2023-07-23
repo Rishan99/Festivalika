@@ -31,6 +31,7 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
     event_id=id
     global __root
     __root = tk if(tk is not None ) else Tk()
+    __root.config(bg=sideBarBackgroundColor)
 
     title_var=StringVar(__root)
     price_var=DoubleVar(__root)

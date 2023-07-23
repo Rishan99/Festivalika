@@ -27,6 +27,7 @@ categoryVar=None
 def run(frame:Widget):
     global __root,dropdown_options,categoryVar,__event_list_data_frame,selectedCategory
     __root =frame
+    __root.config(bg=backgroundColor)
     __event_list_data_frame=Frame(__root,width=22)
     dropdown_options=list(map(lambda x:x.name,category_list))
     dropdown_options.insert(0,"All")
