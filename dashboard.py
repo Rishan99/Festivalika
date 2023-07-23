@@ -126,6 +126,3 @@ def updateIndex(i:int):
     draw_body_widget() 
                                    
    
-    
-if(__name__=="__main__"):
-    run()   
