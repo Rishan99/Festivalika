@@ -12,9 +12,9 @@ Dashboard_Background2="assets/ticket_background.jpg"
 
 # Colors
 primaryColor='#6a3bff'
-pendingColor='#FFA500'
-rejectedColor='#006400'
-approvedColor='#FF0000'
+pendingColor='green'
+rejectedColor='red'
+approvedColor='orange'
 backgroundTileColor='#F9F8F8'
 backgroundColor='#ffffff'
 sideBarTitleColor='#ffffff'

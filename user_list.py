@@ -42,8 +42,9 @@ def __show_user_list():
         __scrollable_body = ScrollbarFrame(__user_list_frame,)
         __scrollable_body.pack(fill='both',expand=1, anchor='e')
         user_list_frame=__scrollable_body.scrolled_frame
+        user_list_frame.config(bg=backgroundColor)
         for user in user_list:
-            user_frame = Frame(user_list_frame)
+            user_frame = Frame(user_list_frame,bg='#999999')
             widget=__user_widget(user_frame,user)
             widget.pack(anchor="w",fill=X)
             user_frame.pack(fill='x',expand=1,anchor='w')
