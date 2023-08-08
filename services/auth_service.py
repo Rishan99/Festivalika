@@ -37,7 +37,7 @@ class AuthService:
         
     def deleteUser(self,userId:int):
         cur= self.databaseHelper.con.cursor()
-        cur.execute('DELETE FROM TicketPayment WHERE userId=? LIMIT',[userId])
+        cur.execute('DELETE FROM TicketPayment WHERE userId=?',[userId])
         cur.execute('''DELETE FROM User where id = ?''',[userId])
         cur.connection.commit()    
         cur.close()

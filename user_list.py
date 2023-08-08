@@ -4,6 +4,7 @@ from tkinter import font
 from tkinter import messagebox as mb
 from tkinter.ttk import Separator
 from entity.user_entity import UserEntity
+from services.auth_service import AuthService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
 from utility.helper import error_message_box
@@ -11,6 +12,8 @@ from widgets.scrollable import  ScrollbarFrame
 from utility.assets import *
 
 user_service = GeneralService()
+
+auth_service = AuthService()
 
 __root:Toplevel =None
 __user_list_frame:Frame=None
@@ -57,19 +60,20 @@ def __user_widget(master,user: UserEntity)->Widget:
     username_label=Label(user_frame,text=user.username,font=('Arial',10,),bg=backgroundColor)
     name_label.grid(row=0,column=0,sticky="w")
     username_label.grid(row=1,column=0,sticky="w")
-    # delete_button=Button(user_frame,text="Delete",command=lambda i=user.id:delete_user(i))
-    # if(UserProvider().user.isAdmin):
-    #         delete_button.grid(row=3,column=0)
+    
+    delete_button=Button(user_frame,text="Delete",command=lambda i=user.id:delete_user(i))
+    if(UserProvider().user.isAdmin):
+            delete_button.grid(row=3,column=0,sticky='w')
     return user_frame
 
 
-# def delete_user(ticket_id:int):
-#     callback = mb.askyesno(title="Confirm",message="Are you sure you want to delete this user, All the tickets of this user will also be delete")
-#     if(callback):
-#         try:
-#             user_service.delete_user(ticket_id)
-#             __refresh_user_list()
-#         except BaseException as ex:
-#             error_message_box(title="Error",message=str(ex)) 
+def delete_user(ticket_id:int):
+    callback = mb.askyesno(title="Confirm",message="Are you sure you want to delete this user, All the tickets of this user will also be delete")
+    if(callback):
+        try:
+            auth_service.deleteUser(ticket_id)
+            __refresh_user_list()
+        except BaseException as ex:
+            error_message_box(message=str(ex)) 
 
     

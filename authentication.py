@@ -67,7 +67,7 @@ def loginPage():
     
     loginButton=Button(loginFormFrame,text="Login",fg="white",bg=primaryColor,command=onLogin)
     loginButton.grid(row=6,column=0,columnspan=2,sticky="nwe",ipady=8)
-    Label(loginFormFrame,text="Don't have an account?",font=('Arial',8,'bold'),bg=backgroundColor).grid(row=7,column=0,sticky="ne")
+    Label(loginFormFrame,text="Don't have an account?",font=('Arial',8,'bold'),bg=backgroundColor).grid(row=7,column=0,columnspan=2,sticky='n')
     Button(loginFormFrame,text="Register",bg=backgroundColor,font=('Arial',8,'bold'),fg=primaryColor,border=0,command=onRegisterPressed).grid(row=7,column=1,sticky="nw")
     loginWindow.mainloop()
     
