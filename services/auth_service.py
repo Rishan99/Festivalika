@@ -15,7 +15,6 @@ class AuthService:
        cur.execute('''SELECT COUNT(Id) as count from User WHERE username = ?  LIMIT 1''', [username])
        value =cur.fetchone()
        cur.close()
-       print()
        return int(dict(value).get('count')) >0
         
    
