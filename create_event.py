@@ -53,8 +53,6 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
              
         start_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.startDate))) 
         end_date_var.initialize(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
-        print(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate)))
-        print(end_date_var.get())
         title_var.set(event_detail.title)  
         description_entry.insert("0.0",event_detail.description)
         price_var.set(event_detail.price)  
