@@ -63,7 +63,7 @@ def __user_widget(master,user: UserEntity)->Widget:
     
     delete_button=Button(user_frame,text="Delete",command=lambda i=user.id:delete_user(i))
     if(UserProvider().user.isAdmin):
-            delete_button.grid(row=3,column=0,sticky='w')
+            delete_button.grid(row=4,column=0,sticky='w')
     return user_frame
 
 
