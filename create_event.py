@@ -11,8 +11,7 @@ from utility.helper import convert_datetime_from_database, convert_datetime_to_d
 from services.event_service import EventService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
-from event_list import run
-from tkcalendar import Calendar, DateEntry
+from tkcalendar import  DateEntry
 from utility.validator import float_validator, empty_validator
 eventService = EventService()
 categoryList:list=GeneralService().getCategoryList()
@@ -50,9 +49,10 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
             try:
                 list_box.select_set(list(list_box.get(0,END)).index(cat.name))
             except:
-                pass    
+                pass   
+             
         start_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.startDate))) 
-        end_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
+        end_date_var.initialize(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
         title_var.set(event_detail.title)  
         description_entry.insert("0.0",event_detail.description)
         price_var.set(event_detail.price)  
@@ -82,13 +82,17 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
     # 
     placeTitle(event_detail_frame,"Start Date",row)
     row+=1
-    start_date_entry= DateEntry(event_detail_frame,width=47,textvariable=start_date_var)
+    start_date_entry= DateEntry(event_detail_frame,width=47,)
+    if(len(start_date_var.get().strip())>0):
+        start_date_entry.set_date(start_date_var.get())
     defineEntryBoxPlace(row,start_date_entry)
     row+=1
     # 
     placeTitle(event_detail_frame,"End Date",row)
     row+=1
-    end_date_entry = DateEntry(event_detail_frame,width=47,textvariable=end_date_var)
+    end_date_entry = DateEntry(event_detail_frame,width=47,)
+    if(len(end_date_var.get().strip())>0):
+        end_date_entry.set_date(end_date_var.get())
     defineEntryBoxPlace(row,end_date_entry)
     row+=1
     #  
@@ -114,7 +118,7 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
     # 
     loginButton=Button(event_detail_frame,text="Create Event" if event_id is None else "Update Event",fg="white",bg="#6a3bff",command=lambda :
         __create_or_update_event(title_entry.get(),address_entry.get(),price_entry.get(),description_entry.get("0.0",END),
-                                 start_date_entry.get(),end_date_entry.get(),list(map(lambda x:next(filter(lambda z:z.name == list_box.get(x),categoryList)).id,
+                                 start_date_entry.get(),end_date_entry.get_date(),list(map(lambda x:next(filter(lambda z:z.name == list_box.get(x),categoryList)).id,
                                  list_box.curselection()))))
     loginButton.grid(row=row,column=0,columnspan=2,sticky="s",ipady=8,pady=15,ipadx=60)
     if(tk is not None):
@@ -124,7 +128,7 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
 def __create_or_update_event(title:str,address:str,price:str,description:str,start_date:str,end_date:str,category_list:list):
     try:
         entity=EventEntity(event_id,title,address,description,str(start_date),str(end_date),(price),"" )
-        is_validation_success=__validate_data(entity) 
+        __validate_data(entity) 
         if(event_id is None):
             eventService.addEvent(entity,category_list)
             success_message_box("Event has been added")

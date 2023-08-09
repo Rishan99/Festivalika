@@ -22,6 +22,7 @@ __user_list_frame:Frame=None
 def run(tk:Widget):
     global __root,dropdown_options,categoryVar,__user_list_frame
     __root =tk
+    __root.config(bg=backgroundColor)
     __user_list_frame=Frame(__root,)
     __show_user_list()
     __user_list_frame.pack(expand=1,fill='both')
