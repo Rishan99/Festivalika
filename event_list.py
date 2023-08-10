@@ -104,7 +104,7 @@ def __event_widget(master,event: EventEntity)->Widget:
     status_label.grid(row=row,column=0,sticky="w")
     row+=1
     if(len(event.description)>0):
-        description_label =Label(master=event_frame,text=event.description)
+        description_label =Label(master=event_frame,text=event.description,background=backgroundColor)
         description_label.grid(row=row,column=0,sticky="w")
         row+=1
     if(UserProvider().user.isAdmin):
