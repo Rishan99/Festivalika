@@ -27,6 +27,14 @@ def run():
     __root =Tk()
     __root.title(App_Name)
     __root.iconbitmap(App_Icon)
+    # Get the screen width and height
+    screen_width = __root.winfo_screenwidth()
+    screen_height = __root.winfo_screenheight()
+
+    # Set the window size to the maximum available size
+    __root.geometry(f"{screen_width}x{screen_height}")
+
+    # __root.attributes("-fullscreen", True)
     app_drawer_frame=side_bar()
     # configuring _root
     app_drawer_frame.pack(side=LEFT,anchor='ne',fill='y',ipadx=45)
@@ -46,14 +54,7 @@ def run():
     __body_widget_frame=Frame(body_frame,bg=backgroundColor)
     __body_widget_frame.grid(row=0,column=0,sticky='nws',ipadx=150)
     
-    # __root.resizable(0,0)
-    # __root.state("zoomed")
     
-    
-       
-    
-    # __root.resizable(0,0)
-    # __root.state("zoomed")
     __root.geometry(f"{__root.winfo_screenwidth()}x{__root.winfo_screenheight()}")
     __selectedIndex=0
     draw_body_widget()

@@ -1,4 +1,5 @@
 
+
 from datetime import datetime
 from time import sleep
 from tkinter import *
@@ -11,11 +12,12 @@ from utility.helper import convert_datetime_from_database, convert_datetime_to_d
 from services.event_service import EventService
 from services.general_service import GeneralService
 from services.user_provider import UserProvider
-from tkcalendar import  DateEntry
+from event_list import run
+from tkcalendar import Calendar, DateEntry
 from utility.validator import float_validator, empty_validator
 eventService = EventService()
 categoryList:list=GeneralService().getCategoryList()
-# __root:Toplevel=None
+__root:Tk=None
 event_id:int|None=None
 on_event_success_callback:None=None
 
@@ -49,10 +51,9 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
             try:
                 list_box.select_set(list(list_box.get(0,END)).index(cat.name))
             except:
-                pass   
-             
+                pass    
         start_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.startDate))) 
-        end_date_var.initialize(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
+        end_date_var.set(convert_datetime_to_default(convert_datetime_from_database(event_detail.endDate))) 
         title_var.set(event_detail.title)  
         description_entry.insert("0.0",event_detail.description)
         price_var.set(event_detail.price)  
@@ -82,17 +83,13 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
     # 
     placeTitle(event_detail_frame,"Start Date",row)
     row+=1
-    start_date_entry= DateEntry(event_detail_frame,width=47,)
-    if(len(start_date_var.get().strip())>0):
-        start_date_entry.set_date(start_date_var.get())
+    start_date_entry= DateEntry(event_detail_frame,width=47,textvariable=start_date_var)
     defineEntryBoxPlace(row,start_date_entry)
     row+=1
     # 
     placeTitle(event_detail_frame,"End Date",row)
     row+=1
-    end_date_entry = DateEntry(event_detail_frame,width=47,)
-    if(len(end_date_var.get().strip())>0):
-        end_date_entry.set_date(end_date_var.get())
+    end_date_entry = DateEntry(event_detail_frame,width=47,textvariable=end_date_var)
     defineEntryBoxPlace(row,end_date_entry)
     row+=1
     #  
@@ -128,13 +125,14 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
 def __create_or_update_event(title:str,address:str,price:str,description:str,start_date:str,end_date:str,category_list:list):
     try:
         entity=EventEntity(event_id,title,address,description,str(start_date),str(end_date),(price),"" )
-        __validate_data(entity) 
+        is_validation_success=__validate_data(entity) 
         if(event_id is None):
             eventService.addEvent(entity,category_list)
             success_message_box("Event has been added")
         else:
             eventService.updateEvent(entity,category_list)
             success_message_box("Event has been updated")
+            __root.destroy()
         if(on_event_success_callback is not None):
             on_event_success_callback()
     except BaseException as ex:
@@ -165,6 +163,5 @@ def placeTitle(master:Widget,title:str,row:int,col:int|None=0):
 def defineEntryBoxPlace(row:int,widget:Widget,col:int|None=0):
     widget.grid(row=row,column=col,sticky='nw',padx=25,ipady=8,)
     
-# if(__name__=="__main__"):    
-#     run()
+
   

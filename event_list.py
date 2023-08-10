@@ -82,15 +82,6 @@ def __show_event_list():
             # event_frame = Frame(event_list_frame,bg=backgroundColor)
             event_frame=__event_widget(event_list_frame,event,)
             event_frame.bind("<Button-1>",lambda event, id=event.id: __on_event_pressed(id))
-            
-            # widget.pack(anchor="w",padx=10,pady=(5,10))
-            # separator = Separator(event_frame, orient='horizontal')
-            # separator.pack(fill='x',expand=1,pady=5,padx=10,)
-            # event_frame.pack(fill='x',expand=1,anchor='w')
-            
-            # widget.pack(anchor="w",padx=10,pady=(5,10))
-            # separator = Separator(event_frame, orient='horizontal')
-            # separator.pack(fill='x',expand=1,pady=5,padx=10,)
             event_frame.pack(expand=1,anchor='w',fill='x')
             Frame(event_list_frame,height=10,width=9999).pack(expand=1,fill=Y)
     
@@ -122,11 +113,7 @@ def __event_widget(master,event: EventEntity)->Widget:
         Button(buttom_frame,text="Edit Event",command=lambda id = event.id:edit_event(id)).pack(side=LEFT)
         Button(buttom_frame,text="Delete Event",command=lambda id = event.id:delete_event(id)).pack(side=RIGHT,padx=8)
     
-    # description_label =Label(master=event_frame,text=event.description)
-    # title_label.grid(row=0,column=0,sticky="w")
-    # address_label.grid(row=1,column=0,sticky="w",pady=5)
-    # status_label.grid(row=2,column=0,sticky="w")
-    # description_label.grid(row=3,column=0,sticky="w",pady=5)
+
     return event_frame
 
 def edit_event(eventId:int):

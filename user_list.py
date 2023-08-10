@@ -64,12 +64,12 @@ def __user_widget(master,user: UserEntity)->Widget:
     
     delete_button=Button(user_frame,text="Delete",command=lambda i=user.id:delete_user(i))
     if(UserProvider().user.isAdmin):
-            delete_button.grid(row=3,column=0,sticky='w')
+            delete_button.grid(row=4,column=0,sticky='w')
     return user_frame
 
 
 def delete_user(ticket_id:int):
-    callback = mb.askyesno(title="Confirm",message="Are you sure you want to delete this user, All the tickets of this user will also be delete")
+    callback = mb.askyesno(title="Confirm",message="Are you sure you want to delete this user, All the tickets of this user will also be deleted?")
     if(callback):
         try:
             auth_service.deleteUser(ticket_id)

@@ -15,11 +15,19 @@ genderList:list=GeneralService().getGenderList()
 
 def __configureTopWindow()->Tk:
     root=Tk()
-    root.geometry("800x500")
+    # root.geometry("800x500")
     root.iconbitmap(App_Icon)
     root.title(App_Name)
     root.config(bg=backgroundColor)
-    root.resizable(0,0)
+    # Get the screen width and height
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    # Set the window size to the maximum available size
+    root.geometry(f"{screen_width}x{screen_height}")
+    # Center the window on the screen
+    # root.attributes("-fullscreen", True)
+    root.resizable(1,1)
     return root
 
 def loginPage(): 
@@ -47,7 +55,7 @@ def loginPage():
     Label(loginFormFrame,text=App_Name,font=('Helvetica',30,"bold"),fg=primaryColor,bg=backgroundColor).grid(row=1,column=0,sticky='wn')
 
     # Form
-    Label(loginFormFrame,text="Email",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=2,column=0,sticky='w')
+    Label(loginFormFrame,text="Username",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=2,column=0,sticky='w')
     emailAddress=Entry(loginFormFrame,font=('Arial',20),bg=inputFieldFillColor,border=0)
     emailAddress.grid(row=3,column=0,sticky='n',columnspan=2)
     Label(loginFormFrame,text="Password",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=4,column=0,sticky='w')
@@ -81,7 +89,7 @@ def __registerPage():
     registerWindow.columnconfigure(0,weight=1)
     registerWindow.rowconfigure(0,weight=1)
     # for image
-    bckImage=ImageTk.PhotoImage(Image.open(Register_Background).resize((registerWindow.winfo_screenheight(),registerWindow.winfo_screenwidth()),Image.LANCZOS))
+    bckImage=ImageTk.PhotoImage(Image.open(Register_Background),Image.LANCZOS)
     background_label = Label(registerWindow,image=bckImage)
     background_label.grid(row=0,column=0)
     
