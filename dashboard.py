@@ -109,7 +109,7 @@ def draw_body_widget():
              ud.run(__body_widget_frame)  
         case 1:
             import create_event as ce
-            ce.run(tk=__body_widget_frame) 
+            ce.run(tk=__body_widget_frame,callback=lambda : updateIndex(0)) 
         case 2:
             import ticket_list as tl
             tl.run(tk=__body_widget_frame) 

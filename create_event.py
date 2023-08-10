@@ -17,7 +17,7 @@ eventService = EventService()
 categoryList:list=GeneralService().getCategoryList()
 # __root:Toplevel=None
 event_id:int|None=None
-event_update_callback:None=None
+on_event_success_callback:None=None
 
 
 def run(id:int|None=None,tk:Widget|None=None,callback=None): 
@@ -25,8 +25,8 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
     """ 
     Pass [id] if you want to update event, else pass as None to create a new event
     """
-    global event_id,categoryList,event_update_callback
-    event_update_callback=callback
+    global event_id,categoryList,on_event_success_callback
+    on_event_success_callback=callback
     event_id=id
     global __root
     __root = tk if(tk is not None ) else Tk()
@@ -118,7 +118,7 @@ def run(id:int|None=None,tk:Widget|None=None,callback=None):
     # 
     loginButton=Button(event_detail_frame,text="Create Event" if event_id is None else "Update Event",fg="white",bg="#6a3bff",command=lambda :
         __create_or_update_event(title_entry.get(),address_entry.get(),price_entry.get(),description_entry.get("0.0",END),
-                                 start_date_entry.get(),end_date_entry.get_date(),list(map(lambda x:next(filter(lambda z:z.name == list_box.get(x),categoryList)).id,
+                                 start_date_entry.get(),end_date_entry.get(),list(map(lambda x:next(filter(lambda z:z.name == list_box.get(x),categoryList)).id,
                                  list_box.curselection()))))
     loginButton.grid(row=row,column=0,columnspan=2,sticky="s",ipady=8,pady=15,ipadx=60)
     if(tk is not None):
@@ -134,9 +134,9 @@ def __create_or_update_event(title:str,address:str,price:str,description:str,sta
             success_message_box("Event has been added")
         else:
             eventService.updateEvent(entity,category_list)
-            if(event_update_callback is not None):
-                event_update_callback()
             success_message_box("Event has been updated")
+        if(on_event_success_callback is not None):
+            on_event_success_callback()
     except BaseException as ex:
         error_message_box(str(ex)) 
 
