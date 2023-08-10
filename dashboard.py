@@ -23,7 +23,7 @@ __selectedIndex:int = 0
 
 
 def run():
-    global __root,__body_widget_frame
+    global __root,__body_widget_frame,__selectedIndex
     __root =Tk()
     __root.title(App_Name)
     __root.iconbitmap(App_Icon)
@@ -55,6 +55,7 @@ def run():
     # __root.resizable(0,0)
     # __root.state("zoomed")
     __root.geometry(f"{__root.winfo_screenwidth()}x{__root.winfo_screenheight()}")
+    __selectedIndex=0
     draw_body_widget()
     __root.mainloop()
 

@@ -22,23 +22,24 @@ __user_list_frame:Frame=None
 def run(tk:Widget):
     global __root,dropdown_options,categoryVar,__user_list_frame
     __root =tk
-    __user_list_frame=Frame(__root,)
+    __user_list_frame=Frame(__root,bg=backgroundColor)
     __show_user_list()
     __user_list_frame.pack(expand=1,fill='both')
     # __root.mainloop()
   
 
 def __refresh_user_list():
-    global __user_list_frame
-    childs = __user_list_frame.children.copy()
+    global __root
+    childs = __root.children.copy()
     for child in childs.values():
         child.destroy()
     __show_user_list()
 
 def __show_user_list():
+    
     user_list= user_service.getUserList()
-    Label(__root,text="User List",font=font.Font(weight="bold",size=16),bg=backgroundColor).pack(padx=10,anchor='w',pady=(10,0))  
-    Label(__root,text=f'Total Users: {len(user_list)}',bg=backgroundColor).pack(padx=10,anchor='w',pady=(0,5))
+    Label(__user_list_frame,text="User List",font=font.Font(weight="bold",size=16),bg=backgroundColor).pack(padx=10,anchor='w',pady=(10,0))  
+    Label(__user_list_frame,text=f'Total Users: {len(user_list)}',bg=backgroundColor).pack(padx=10,anchor='w',pady=(0,5))
     if(len(user_list)==0):
         Label(__user_list_frame,text="No User Found",font=font.Font(weight="normal",size=14,)).pack(fill=BOTH,expand=1,padx=80,pady=20)
     else:    
