@@ -26,7 +26,7 @@ def __configureTopWindow()->Tk:
     # Set the window size to the maximum available size
     root.geometry(f"{screen_width}x{screen_height}")
     # Center the window on the screen
-    # root.attributes("-fullscreen", True)
+    root.attributes("-fullscreen", True)
     root.resizable(1,1)
     return root
 
@@ -55,7 +55,7 @@ def loginPage():
     Label(loginFormFrame,text=App_Name,font=('Helvetica',30,"bold"),fg=primaryColor,bg=backgroundColor).grid(row=1,column=0,sticky='wn')
 
     # Form
-    Label(loginFormFrame,text="Email",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=2,column=0,sticky='w')
+    Label(loginFormFrame,text="Username",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=2,column=0,sticky='w')
     emailAddress=Entry(loginFormFrame,font=('Arial',20),bg=inputFieldFillColor,border=0)
     emailAddress.grid(row=3,column=0,sticky='n',columnspan=2)
     Label(loginFormFrame,text="Password",font=('Arial',10,'bold'),bg=backgroundColor).grid(row=4,column=0,sticky='w')
