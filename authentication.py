@@ -26,7 +26,7 @@ def __configureTopWindow()->Tk:
     # Set the window size to the maximum available size
     root.geometry(f"{screen_width}x{screen_height}")
     # Center the window on the screen
-    root.attributes("-fullscreen", True)
+    # root.attributes("-fullscreen", True)
     root.resizable(1,1)
     return root
 

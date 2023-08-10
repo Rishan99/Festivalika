@@ -17,7 +17,7 @@ from tkcalendar import Calendar, DateEntry
 from utility.validator import float_validator, empty_validator
 eventService = EventService()
 categoryList:list=GeneralService().getCategoryList()
-# __root:Toplevel=None
+__root:Tk=None
 event_id:int|None=None
 on_event_success_callback:None=None
 
@@ -132,6 +132,7 @@ def __create_or_update_event(title:str,address:str,price:str,description:str,sta
         else:
             eventService.updateEvent(entity,category_list)
             success_message_box("Event has been updated")
+            __root.destroy()
         if(on_event_success_callback is not None):
             on_event_success_callback()
     except BaseException as ex:

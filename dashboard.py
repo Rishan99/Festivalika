@@ -34,7 +34,7 @@ def run():
     # Set the window size to the maximum available size
     __root.geometry(f"{screen_width}x{screen_height}")
 
-    __root.attributes("-fullscreen", True)
+    # __root.attributes("-fullscreen", True)
     app_drawer_frame=side_bar()
     # configuring _root
     app_drawer_frame.pack(side=LEFT,anchor='ne',fill='y',ipadx=45)
